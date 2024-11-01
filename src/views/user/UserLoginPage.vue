@@ -8,8 +8,6 @@ import { useRouter, useRoute } from 'vue-router'
 import { ThreePartLoginEnum } from '@/api/models/enums/ThreePartLoginEnum'
 const router = useRouter()
 const route = useRoute()
-//TODO 待删
-const text = import.meta.env.APP_TITLE;
 const form = ref<UserLoginReqDTO>({
   userAccount: '',
   userPassword: ''
@@ -93,7 +91,6 @@ const rules = {
 
 <template>
   <p class="h2">用户登录</p>
-  {{text}}
   <a-form
     :rules="rules"
     :model="form"

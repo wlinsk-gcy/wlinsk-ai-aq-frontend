@@ -83,7 +83,6 @@ const handleSSESubmit = () => {
   props.onSSEStart?.(null)
   //关闭抽屉
   handleCancel()
-  //TODO 手动跟换完整的SSE请求地址
   //原生的EventSource，无法设置请求头,只能在请求参数中携带了
   const eventSource = new EventSource(
     import.meta.env.VITE_REQUEST_HOST+'/question/aiGenerate/sse' +
