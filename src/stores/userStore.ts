@@ -6,16 +6,13 @@ import ACCESS_ENUM from '@/access/accessEnum'
 
 export const useUserStore = defineStore('loginUser', () => {
   const loginUser = ref<QueryUserDetailRespDTO>({
-    userName: '未登录'
+
   })
 
   async function fetchLoginUser() {
-    try {
-      const result = await queryDetails()
-      loginUser.value = result.data as QueryUserDetailRespDTO
-    } catch (e) {
-      loginUser.value = { userRole: ACCESS_ENUM.NOT_LOGIN };
-    }
+    const result = await queryDetails()
+    loginUser.value = result.data as QueryUserDetailRespDTO ?? {userRole: ACCESS_ENUM.NOT_LOGIN}
+    console.log('userStores: ',loginUser.value)
   }
 
   function setLoginUser(newLoginUser: QueryUserDetailRespDTO) {
@@ -23,4 +20,7 @@ export const useUserStore = defineStore('loginUser', () => {
   }
 
   return { loginUser, setLoginUser, fetchLoginUser }
+},{
+  //开启持久化
+  persist: true
 })

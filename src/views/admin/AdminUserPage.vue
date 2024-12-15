@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue'
+import {  ref, watchEffect } from 'vue'
 import { deleteById, queryPage } from '@/api/controller/admin/userController'
 import type { QueryPageRespDTO } from '@/api/models/admin/user/QueryPageRespDTO'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
@@ -12,7 +12,7 @@ const userStore = useUserStore()
 // 初始化搜索条件（不应该被修改）
 const initSearchParams = {
   pageNum: 1,
-  pageSize: 10
+  pageSize: 5
 }
 const formSearchParams = ref<QueryPageReqDTO>({})
 const searchParams = ref<QueryPageReqDTO>({
@@ -191,4 +191,6 @@ const columns = [
   </a-table>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

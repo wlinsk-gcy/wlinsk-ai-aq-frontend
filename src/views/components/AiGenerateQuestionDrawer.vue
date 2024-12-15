@@ -92,14 +92,14 @@ const handleSSESubmit = () => {
   )
   eventSource.onmessage = function (event) {
     const result = JSON.parse(event.data)
-    console.log(result)
+    // console.log(result)
     questionStore.setAiGenerateQuestionId(result.aiGenerateQuestionId)
     props.onSSESuccess?.(result)
   }
   eventSource.onerror = function (event) {
     if (event.eventPhase === EventSource.CLOSED) {
       //正常关闭
-      console.log('连接关闭')
+      // console.log('连接关闭')
       props.onSSEClose?.(event)
     }
     eventSource.close()

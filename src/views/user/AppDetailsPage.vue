@@ -25,6 +25,7 @@ const isMy = computed(() => {
   //data发生变化时需要重新计算一下
   return loginUserId && loginUserId === data.value.userId
 })
+
 const loadData = async () => {
   if (props.appId === '' || props.appId.startsWith('__arco_menu')) {
     return
@@ -36,12 +37,19 @@ const loadData = async () => {
     Message.error('获取数据失败，' + e)
   }
 }
+
+const doClickShare = () => {
+  //把链接复制到粘贴板
+  navigator.clipboard.writeText(import.meta.env.VITE_SHARE_APP_PATH + props.appId)
+  Message.success('分享链接已成功复制！')
+}
 /**
  * 监听成员变量，改变时触发数据的重新加载
  */
 watchEffect(() => {
   loadData()
 })
+
 </script>
 <template>
   <div id="appDetailPage">
@@ -70,7 +78,7 @@ watchEffect(() => {
           <p>创建时间：{{ dayjs(data.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
           <a-space size="medium">
             <a-button v-if="data.reviewStatus === 1" type="primary" :href="`/answer/do/${appId}`">开始答题</a-button>
-            <a-button v-if="data.reviewStatus === 1">分享应用</a-button>
+            <a-button v-if="data.reviewStatus === 1" @click="doClickShare">分享应用</a-button>
             <a-button v-if="isMy" :href="`/add/question/${appId}`">设置题目</a-button>
             <a-button v-if="isMy" :href="`/add/scoringResult/${appId}`">设置评分</a-button>
             <a-button v-if="isMy" :href="`/add/app/${appId}`">修改应用</a-button>

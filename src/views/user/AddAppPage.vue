@@ -27,7 +27,6 @@ const loadData = async () => {
   if (props.appId === '' || props.appId.startsWith('__arco_menu')) {
     return
   }
-  console.log(props.appId)
   try {
     const result = await queryById(props.appId)
     oldApp.value = result.data

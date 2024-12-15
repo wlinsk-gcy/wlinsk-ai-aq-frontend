@@ -36,7 +36,7 @@ export async function threePartLogin(reqDTO: ThreePartLoginReqDTO){
     data: reqDTO
   }).then((res) => {
     // 登录成功后，将token存储到本地
-    const data = res.data as string
+    const data = res.data as string ?? null
     return data
   })
 }

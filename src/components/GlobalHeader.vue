@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { routes } from '@/router/route'
 import { useRouter, useRoute } from 'vue-router'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import checkAccess from '@/access/checkAccess'
 import { useUserStore } from '@/stores/userStore'
 import { IconArrowLeft } from '@arco-design/web-vue/es/icon'
@@ -44,8 +44,8 @@ const visible = ref(false);
 const handleOk = async () => {
   try {
     await logout()
-    // await router.push('/')
-    router.go(-1)
+    await router.push('/')
+    // router.go(0)
   } catch (e: any) {
     Message.error('退出失败：' + e)
   }finally {
@@ -88,7 +88,7 @@ const handleCancel = () => {
             />
           </a-avatar>
           <template #content>
-            <a-doption>个人信息</a-doption>
+            <a-doption >个人信息</a-doption>
             <a-doption @click="visible = true">退出登录</a-doption>
           </template>
         </a-dropdown>

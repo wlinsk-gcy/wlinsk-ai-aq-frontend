@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
-import { ref } from 'vue'
 import { Modal } from '@arco-design/web-vue'
-
-const visible = ref(false)
 const handleClickInfo = () => {
   Modal.info({
     content: '祝您生活愉快！'

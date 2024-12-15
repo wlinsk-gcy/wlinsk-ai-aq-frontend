@@ -32,7 +32,7 @@ coverage
 .idea/
 .vscode/
 *.bak
-
+.env.production
 
 
 

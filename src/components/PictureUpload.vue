@@ -44,7 +44,6 @@ const customRequest: any = async (option: any) => {
     }
     props.onChange?.(data.imageUrl)
     onSuccess()
-    console.log(file.value)
     // return result
   } catch (e: any) {
     Message.error(e)
