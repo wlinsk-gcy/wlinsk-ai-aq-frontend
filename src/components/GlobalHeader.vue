@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { routes } from '@/router/route'
 import { useRouter, useRoute } from 'vue-router'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import checkAccess from '@/access/checkAccess'
 import { useUserStore } from '@/stores/userStore'
 import { IconArrowLeft } from '@arco-design/web-vue/es/icon'
@@ -88,8 +88,8 @@ const handleCancel = () => {
             />
           </a-avatar>
           <template #content>
-            <a-doption >个人信息</a-doption>
-            <a-doption @click="visible = true">退出登录</a-doption>
+            <a-doption id="personInfo" @click="router.push('/person/info')">个人信息</a-doption>
+            <a-doption id="immediatelyLogout" @click="visible = true">退出登录</a-doption>
           </template>
         </a-dropdown>
       </div>
@@ -99,7 +99,7 @@ const handleCancel = () => {
             未登录
           </a-avatar>
           <template #content>
-            <a-doption @click="router.push('/user/login')">立即登录</a-doption>
+            <a-doption id="immediatelyLogin" @click="router.push('/user/login')">立即登录</a-doption>
           </template>
         </a-dropdown>
       </div>
@@ -132,6 +132,33 @@ const handleCancel = () => {
 
   .arco-btn-size-medium {
     padding: 0 2px;
+  }
+
+  @media screen and (max-width: 768px) {
+    :deep(.arco-menu) {
+      border-bottom: none;
+    }
+
+    :deep(.arco-menu-pop) {
+      .arco-menu-item {
+        height: 40px !important;
+        line-height: 40px !important;
+        padding: 0 16px !important;
+      }
+    }
+
+    :deep(.arco-menu-collapse-button) {
+      height: 32px;
+      width: 32px;
+    }
+
+    .titleBar {
+      .logo {
+        width: 40px;
+        height: 24px;
+        margin-right: 0;
+      }
+    }
   }
 }
 </style>

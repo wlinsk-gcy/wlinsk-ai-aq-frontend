@@ -13,6 +13,7 @@ import DoAnswerPage from '@/views/user/answer/DoAnswerPage.vue'
 import AnswerResultPage from '@/views/user/answer/AnswerResultPage.vue'
 import MyAnswerPage from '@/views/user/answer/MyAnswerPage.vue'
 import MyAppPage from '@/views/user/MyAppPage.vue'
+import PersonInfoPage from '@/views/user/PersonInfoPage.vue'
 
 export const routes = [
   {
@@ -136,6 +137,15 @@ export const routes = [
         component: UserRegisterPage
       }
     ]
+  },
+  {
+    path: '/person/info',
+    name: '个人信息',
+    component: PersonInfoPage,
+    meta: {
+      hideInMenu: true,
+      access: ACCESS_ENUM.USER,
+    }
   },
   {
     path: '/noAuth',

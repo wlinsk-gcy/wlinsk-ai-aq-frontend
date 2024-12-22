@@ -6,6 +6,7 @@ import type { UserLoginRespDTO } from '@/api/models/user/user/UserLoginRespDTO'
 import type { UserRegisterReqDTO } from '@/api/models/user/user/UserRegisterReqDTO'
 import type { ThreePartLoginReqDTO } from '@/api/models/user/user/ThreePartLoginReqDTO'
 import { useUserStore } from '@/stores/userStore'
+import type { UpdatePasswordReqDTO } from '@/api/models/user/user/UpdatePasswordReqDTO'
 
 export async function queryDetails() {
   return request<any, Result<QueryUserDetailRespDTO>>('/user/queryDetails', {
@@ -71,5 +72,15 @@ export async function logout(){
     localStorage.removeItem('token')
     useUserStore().setLoginUser({})
     return res
+  })
+}
+
+export async function updatePassword(reqDTO: UpdatePasswordReqDTO) {
+  return request<any, Result<any>>('/user/updatePassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: reqDTO
   })
 }
