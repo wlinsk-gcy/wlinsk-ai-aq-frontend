@@ -6,6 +6,7 @@ import type { QueryUserDetailRespDTO } from '@/api/models/user/user/QueryUserDet
 import { logout, queryDetails, updatePassword } from '@/api/controller/user/userController'
 import PictureUploader from '@/components/PictureUpload.vue'
 import { useRouter } from 'vue-router'
+import { s } from 'unimport/dist/shared/unimport.b308f22b'
 
 let router = useRouter()
 const userInfo = ref<QueryUserDetailRespDTO>({})
@@ -124,7 +125,7 @@ const formatDate = (date: string | any) => {
 }
 
 // 在 script setup 部分添加角色映射
-const roleMap = {
+const roleMap: {[key: string]: string} = {
   admin: '管理员',
   user: '普通用户',
   ban: '已注销'
@@ -189,7 +190,7 @@ loadUserInfo()
               </div>
             </a-descriptions-item>
             <a-descriptions-item label="用户角色">
-              {{ roleMap[userInfo.userRole] }}
+              {{ roleMap[userInfo.userRole as string] }}
             </a-descriptions-item>
             <a-descriptions-item label="注册时间">
               {{ formatDate(userInfo.createTime ?? '') }}
