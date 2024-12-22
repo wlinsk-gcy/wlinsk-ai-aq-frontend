@@ -6,7 +6,6 @@ import type { QueryUserDetailRespDTO } from '@/api/models/user/user/QueryUserDet
 import { logout, queryDetails, updatePassword } from '@/api/controller/user/userController'
 import PictureUploader from '@/components/PictureUpload.vue'
 import { useRouter } from 'vue-router'
-import { s } from 'unimport/dist/shared/unimport.b308f22b'
 
 let router = useRouter()
 const userInfo = ref<QueryUserDetailRespDTO>({})
