@@ -3,7 +3,13 @@ import { ref } from 'vue'
 import { Message, Modal } from '@arco-design/web-vue'
 import { IconEdit } from '@arco-design/web-vue/es/icon'
 import type { QueryUserDetailRespDTO } from '@/api/models/user/user/QueryUserDetailRespDTO'
-import { logout, queryDetails, updatePassword } from '@/api/controller/user/userController'
+import {
+  logout,
+  queryDetails,
+  updatePassword,
+  updateUserName,
+  updateUserProfile
+} from '@/api/controller/user/userController'
 import PictureUploader from '@/components/PictureUpload.vue'
 import { useRouter } from 'vue-router'
 
@@ -59,7 +65,7 @@ const handleUpdateName = async () => {
     content: '确定要修改用户名吗？',
     onOk: async () => {
       try {
-        // TODO: 调用更新接口
+        await updateUserName(nameForm.value)
         Message.success('更新成功')
         editNameVisible.value = false
         await loadUserInfo()
@@ -77,12 +83,16 @@ const handleUpdateProfile = async () => {
     content: '确定要修改个人简介吗？',
     onOk: async () => {
       try {
-        // TODO: 调用更新接口
+        await updateUserProfile(profileForm.value)
         Message.success('更新成功')
-        editProfileVisible.value = false
         await loadUserInfo()
       } catch (e: any) {
         Message.error('更新失败')
+      }finally {
+        editProfileVisible.value = false
+        profileForm.value = {
+          userProfile: ''
+        }
       }
     }
   })

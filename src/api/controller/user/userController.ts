@@ -7,6 +7,8 @@ import type { UserRegisterReqDTO } from '@/api/models/user/user/UserRegisterReqD
 import type { ThreePartLoginReqDTO } from '@/api/models/user/user/ThreePartLoginReqDTO'
 import { useUserStore } from '@/stores/userStore'
 import type { UpdatePasswordReqDTO } from '@/api/models/user/user/UpdatePasswordReqDTO'
+import type { UpdateUserNameReqDTO } from '@/api/models/user/user/UpdateUserNameReqDTO'
+import type { UpdateUserProfileReqDTO } from '@/api/models/user/user/UpdateUserProfileReqDTO'
 
 export async function queryDetails() {
   return request<any, Result<QueryUserDetailRespDTO>>('/user/queryDetails', {
@@ -77,6 +79,24 @@ export async function logout(){
 
 export async function updatePassword(reqDTO: UpdatePasswordReqDTO) {
   return request<any, Result<any>>('/user/updatePassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: reqDTO
+  })
+}
+export async function updateUserName(reqDTO: UpdateUserNameReqDTO) {
+  return request<any, Result<any>>('/user/updateUserName', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: reqDTO
+  })
+}
+export async function updateUserProfile(reqDTO: UpdateUserProfileReqDTO) {
+  return request<any, Result<any>>('/user/updateUserProfile', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

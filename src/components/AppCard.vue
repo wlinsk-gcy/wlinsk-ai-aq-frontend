@@ -26,9 +26,29 @@ const doCardClick = () => {
   }
   router.push(`/app/details/${props.app.appId}`)
 }
+//解决：Cannot read properties of undefined (reading 'writeText')
+const unsecuredCopyToClipboard = (text: string) => {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('Unable to copy to clipboard', err);
+  }
+  document.body.removeChild(textArea);
+}
 const doClickShare = () => {
+  const content = import.meta.env.VITE_SHARE_APP_PATH + props.app.appId
   //把链接复制到粘贴板
-  navigator.clipboard.writeText(import.meta.env.VITE_SHARE_APP_PATH + props.app.appId)
+  if (window.isSecureContext && navigator.clipboard) {
+    navigator.clipboard.writeText(content);
+  } else {
+    unsecuredCopyToClipboard(content);
+  }
+  // navigator.clipboard.writeText(import.meta.env.VITE_SHARE_APP_PATH + props.app.appId)
   Message.success('分享链接已成功复制！')
 }
 </script>

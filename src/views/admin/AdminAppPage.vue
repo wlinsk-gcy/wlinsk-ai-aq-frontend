@@ -69,8 +69,9 @@ const doDelete = async (appId: string) => {
   try {
     await deleteById(appId)
     doSearch()
+    Message.success('删除成功')
   } catch (e) {
-    Message.error('操作失败')
+    Message.error('删除失败：' + e)
   }
 }
 /**
