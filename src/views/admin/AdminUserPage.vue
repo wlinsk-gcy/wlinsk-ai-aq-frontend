@@ -5,7 +5,7 @@ import type { QueryPageRespDTO } from '@/api/models/admin/user/QueryPageRespDTO'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import type { QueryPageReqDTO } from '@/api/models/admin/user/QueryPageReqDTO'
 import { UserRoleEnumMap } from '@/api/models/enums/UserRoleEnum'
-import { Message, type TableColumnData } from '@arco-design/web-vue'
+import { Message, Modal, type TableColumnData } from '@arco-design/web-vue'
 import { useUserStore } from '@/stores/userStore'
 
 const userStore = useUserStore()
@@ -185,7 +185,14 @@ const columns = [
     </template>
     <template #optional="{ record }">
       <a-space>
-        <a-button :disabled="userStore.loginUser.userId === record.userId" status="danger" @click="doDelete(record.userId)">删除</a-button>
+        <a-button :disabled="userStore.loginUser.userId === record.userId" status="danger" @click="Modal.warning({
+            title:'温馨提示',
+            content: '您是否确认删除该用户？',
+            hideCancel: false,
+            onOk: () => {
+              doDelete(record.userId)
+            }
+          })">删除</a-button>
       </a-space>
     </template>
   </a-table>

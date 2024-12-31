@@ -5,10 +5,11 @@ import type {
 } from '@/api/models/user/userAnswer/UserAnswerDTO'
 import { ref, watchEffect } from 'vue'
 import { deleteById, queryPage } from '@/api/controller/user/userAnswerController'
-import { Message, type TableColumnData } from '@arco-design/web-vue'
+import { Message, Modal, type TableColumnData } from '@arco-design/web-vue'
 import { AppTypeEnumMap } from '@/api/models/enums/AppTypeEnum'
 import { ScoringStrategyEnumMap } from '@/api/models/enums/ScoringStrategyEnum'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
+import { logout } from '@/api/controller/user/userController'
 
 const formSearchParams = ref<QueryUserAnswerPageReqDTO>({})
 // 初始化搜索条件（不应该被修改）
@@ -48,6 +49,7 @@ const doDelete = async (recordId: string) => {
   try {
     await deleteById(recordId)
     doSearch()
+    Message.success('删除成功')
   } catch (e) {
     Message.error('操作失败')
   }
@@ -213,7 +215,14 @@ const columns = [
     </template>
     <template #optional="{ record }">
       <a-space>
-        <a-button status="danger" @click="doDelete(record)">删除</a-button>
+        <a-button status="danger" @click="Modal.warning({
+            title:'温馨提示',
+            content: '您是否确认删除当前记录？',
+            hideCancel: false,
+            onOk: () => {
+              doDelete(record.recordId)
+            }
+          })">删除</a-button>
       </a-space>
     </template>
   </a-table>

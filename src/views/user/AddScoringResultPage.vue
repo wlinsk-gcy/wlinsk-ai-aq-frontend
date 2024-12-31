@@ -28,6 +28,20 @@ const tableRef = ref()
 const form = ref<AddScoringResultReqDTO>({
   appId: props.appId
 })
+const okLoading = ref(false)
+const formRef: any = ref(null);
+const handleSubmitV2 = async () => {
+  const error = await formRef.value?.validate();
+  if (!error) {
+    //提交表单逻辑
+    okLoading.value = true
+    await handleSubmit()
+    okLoading.value = false
+    //return true就会关闭对话框
+    return true;
+  }
+  return false;
+}
 const handleSubmit = async () => {
   if (props.appId === '') {
     return
@@ -61,6 +75,7 @@ const doUpdate = (scoringResult: UpdateScoringResultReqDTO) => {
 const visible = ref(false)
 const handleCancel = () => {
   visible.value = false
+  formRef.value?.clearValidate();
   form.value = {
     appId: props.appId
   }
@@ -77,47 +92,6 @@ watchEffect(() => {
   loadAppInfo()
 })
 const nonZeroInteger = /^[1-9][0-9]*$/
-const rules = {
-  resultName: [
-    {
-      validator: (value: any, cb: any) => {
-        if (!value) {
-          cb('请输入结果名称')
-        }
-      }
-    }
-  ],
-  resultDesc: [
-    {
-      validator: (value: any, cb: any) => {
-        if (!value) {
-          cb('请输入结果描述')
-        }
-      }
-    }
-  ],
-  resultPicture: [
-    {
-      validator: (value: any, cb: any) => {
-        if (!value) {
-          cb('请输入结果图标')
-        }
-      }
-    }
-  ],
-  resultScoreRange: [
-    {
-      validator: (value: any, cb: any) => {
-        if (!value) {
-          cb('请输入结果得分范围')
-        }
-        if (!nonZeroInteger.test(value)) {
-          cb('请输入非零正整数')
-        }
-      }
-    }
-  ]
-}
 </script>
 
 <template>
@@ -128,7 +102,8 @@ const rules = {
       v-model:visible="visible"
       title="设置评分"
       @cancel="handleCancel"
-      @ok="handleSubmit"
+      :on-before-ok="handleSubmitV2"
+      :loading="okLoading"
     >
       <a-form
         :model="form"
@@ -136,6 +111,7 @@ const rules = {
         label-align="left"
         auto-label-width
         @submit="handleSubmit"
+        ref="formRef"
       >
         <a-form-item label="应用 id">
           {{ appId }}

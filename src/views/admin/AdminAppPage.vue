@@ -6,7 +6,7 @@ import { AppTypeEnumMap } from '@/api/models/enums/AppTypeEnum'
 import { ScoringStrategyEnumMap } from '@/api/models/enums/ScoringStrategyEnum'
 import { ReviewStatusEnum, ReviewStatusEnumMap } from '@/api/models/enums/ReviewStatusEnum'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
-import { Message, type TableColumnData } from '@arco-design/web-vue'
+import { Message, Modal, type TableColumnData } from '@arco-design/web-vue'
 // 初始化搜索条件（不应该被修改）
 const initSearchParams = {
   pageNum: 1,
@@ -252,7 +252,14 @@ const columns = [
         >
           拒绝
         </a-button>
-        <a-button status="danger" @click="doDelete(record.appId)">删除</a-button>
+        <a-button status="danger" @click="Modal.warning({
+            title:'温馨提示',
+            content: '您是否确认删除该应用？',
+            hideCancel: false,
+            onOk: () => {
+              doDelete(record.appId)
+            }
+          })">删除</a-button>
       </a-space>
     </template>
   </a-table>
