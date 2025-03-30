@@ -50,6 +50,7 @@ const handleSubmit = async () => {
     props.onSSEStart(null)
   }
   // submitting.value = true
+  let flag = false;
   try {
     const result = await aiGenerate({
       ...form.value,
@@ -59,6 +60,7 @@ const handleSubmit = async () => {
       //不为空才算成功
       if (props.onSuccess) {
         props.onSuccess(result.data.questionContent ?? [])
+        flag = true
       }
       if (result.data?.aiGenerateQuestionId) {
         questionStore.setAiGenerateQuestionId(result.data.aiGenerateQuestionId)
@@ -71,7 +73,7 @@ const handleSubmit = async () => {
     Message.error('操作失败：' + e)
   }finally {
     if (props.onSSEClose){
-      props.onSSEClose(null)
+      props.onSSEClose(flag)
     }
   }
   // submitting.value = false

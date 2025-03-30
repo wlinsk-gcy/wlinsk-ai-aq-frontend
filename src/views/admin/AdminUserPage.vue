@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {  ref, watchEffect } from 'vue'
-import { deleteById, queryPage } from '@/api/controller/admin/userController'
+import { deleteById, queryPage, updateUserRole } from '@/api/controller/admin/userController'
 import type { QueryPageRespDTO } from '@/api/models/admin/user/QueryPageRespDTO'
 import { dayjs } from '@arco-design/web-vue/es/_utils/date'
 import type { QueryPageReqDTO } from '@/api/models/admin/user/QueryPageReqDTO'
-import { UserRoleEnumMap } from '@/api/models/enums/UserRoleEnum'
+import { UserRoleEnum, UserRoleEnumMap } from '@/api/models/enums/UserRoleEnum'
 import { Message, Modal, type TableColumnData } from '@arco-design/web-vue'
 import { useUserStore } from '@/stores/userStore'
 
@@ -49,6 +49,33 @@ const doDelete = async (userId: string) => {
     Message.error('操作失败')
   }
 }
+const visibleForAuthorize = ref(false);
+const authorizeCurrentRecord = ref<QueryPageRespDTO>({})
+const authorizeForm = ref({
+  role: ''
+});
+
+const handleAuthorizeBeforeOk = async () => {
+  try {
+    await updateUserRole({
+      userId: authorizeCurrentRecord.value.userId,
+      userRole: authorizeForm.value.role as UserRoleEnum
+    })
+    doSearch()
+  } catch (e) {
+    Message.error('操作失败')
+  } finally {
+    authorizeForm.value = {role:''};
+    authorizeCurrentRecord.value = {}
+    visibleForAuthorize.value = false;
+  }
+
+};
+const handleAuthorizeCancel = () => {
+  authorizeForm.value = {role:''};
+  authorizeCurrentRecord.value = {}
+}
+
 /**
  * 执行搜索，响应式对象的值一发生变化，watchEffect就可以监听到
  */
@@ -185,6 +212,10 @@ const columns = [
     </template>
     <template #optional="{ record }">
       <a-space>
+        <a-button :disabled="userStore.loginUser.userId === record.userId || record.userRole == UserRoleEnum.ADMIN"
+                  @click="visibleForAuthorize = true;authorizeCurrentRecord = record" status="warning" >
+          权限
+        </a-button>
         <a-button :disabled="userStore.loginUser.userId === record.userId" status="danger" @click="Modal.warning({
             title:'温馨提示',
             content: '您是否确认删除该用户？',
@@ -194,8 +225,21 @@ const columns = [
             }
           })">删除</a-button>
       </a-space>
+
     </template>
   </a-table>
+
+  <a-modal v-model:visible="visibleForAuthorize" title="权限分配" @cancel="handleAuthorizeCancel" @before-ok="handleAuthorizeBeforeOk">
+    <a-form :model="authorizeForm" >
+      <a-form-item field="role" label="角色">
+        <a-select v-model="authorizeForm.role">
+          <a-option :value="UserRoleEnum.ADMIN" v-show="authorizeCurrentRecord?.userRole != UserRoleEnum.ADMIN">{{UserRoleEnumMap[UserRoleEnum.ADMIN]}}</a-option>
+          <a-option :value="UserRoleEnum.USER" v-show="authorizeCurrentRecord?.userRole != UserRoleEnum.USER">{{UserRoleEnumMap[UserRoleEnum.USER]}}</a-option>
+          <a-option :value="UserRoleEnum.BAN" v-show="authorizeCurrentRecord?.userRole != UserRoleEnum.BAN">{{UserRoleEnumMap[UserRoleEnum.BAN]}}</a-option>
+        </a-select>
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <style scoped>

@@ -151,7 +151,9 @@ const onSSEStart = (event: any) => {
   }).close
 }
 const onSSEClose = (event: any) => {
-  Message.success('生成完毕')
+  if (event){
+    Message.success('生成完毕')
+  }
   close?.()
 }
 // 获取旧数据
