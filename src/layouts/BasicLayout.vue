@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import { Modal } from '@arco-design/web-vue'
+import CustomerServiceFloat from '@/components/CustomerServiceFloat.vue'
+
 const handleClickInfo = () => {
   Modal.info({
     content: '祝您生活愉快！'
@@ -21,6 +23,7 @@ const handleClickInfo = () => {
         <a-button type="text" @click="handleClickInfo">WLINSK</a-button>
       </a-layout-footer>
     </a-layout>
+    <CustomerServiceFloat />
   </div>
 </template>
 

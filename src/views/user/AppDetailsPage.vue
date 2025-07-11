@@ -58,24 +58,58 @@ watchEffect(() => {
         <a-alert type="warning" v-if="data.reviewStatus === 0">当前应用未审核，请耐心等候。</a-alert>
         <a-alert type="error" v-if="data.reviewStatus === 2">当前应用审核不通过，原因：{{data.reviewMessage}}</a-alert>
         <a-col flex="auto" class="content-wrapper">
-          <p class="h2">{{ data.appName }}</p>
-          <p>应用描述：{{ data.appDesc }}</p>
-          <p>应用类型：{{ AppTypeEnumMap[data.appType as number] }}</p>
-          <p>评分策略：{{ ScoringStrategyEnumMap[data.scoringStrategy as number] }}</p>
-          <p>
-            <a-space>
-              作者：
-              <div :style="{ display: 'flex', alignItems: 'center' }">
+          <!--<p class="h2">{{ data.appName }}</p>-->
+          <!--<p>应用描述：{{ data.appDesc }}</p>-->
+          <!--<p>应用类型：{{ AppTypeEnumMap[data.appType as number] }}</p>-->
+          <!--<p>评分策略：{{ ScoringStrategyEnumMap[data.scoringStrategy as number] }}</p>-->
+          <!--<p>-->
+          <!--  <a-space>-->
+          <!--    作者：-->
+          <!--    <div :style="{ display: 'flex', alignItems: 'center' }">-->
+          <!--      <a-avatar-->
+          <!--        :size="24"-->
+          <!--        :image-url="data.userInfo?.userAvatar"-->
+          <!--        :style="{ marginRight: '8px', background: 'none' }"-->
+          <!--      />-->
+          <!--      <a-typography-text>{{ data.userInfo?.userName ?? '匿名用户' }}</a-typography-text>-->
+          <!--    </div>-->
+          <!--  </a-space>-->
+          <!--</p>-->
+          <!--<p>创建时间：{{ dayjs(data.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>-->
+          <!-- 应用标题 -->
+          <a-typography-title :heading="4" style="margin-bottom: 16px;">{{ data.appName }}</a-typography-title>
+
+          <!-- 应用详情字段展示 -->
+          <a-descriptions
+            :column="1"
+            size="medium"
+            layout="horizontal"
+            style="margin-bottom: 16px;"
+          >
+            <a-descriptions-item label="应用描述">
+              <div class="desc-limit">{{ data.appDesc }}</div>
+            </a-descriptions-item>
+            <a-descriptions-item label="应用类型">
+              {{ AppTypeEnumMap[data.appType as number] }}
+            </a-descriptions-item>
+            <a-descriptions-item label="评分策略">
+              {{ ScoringStrategyEnumMap[data.scoringStrategy as number] }}
+            </a-descriptions-item>
+            <a-descriptions-item label="作者">
+              <div style="display: flex; align-items: center;">
                 <a-avatar
                   :size="24"
                   :image-url="data.userInfo?.userAvatar"
-                  :style="{ marginRight: '8px', background: 'none' }"
+                  style="margin-right: 8px;"
                 />
                 <a-typography-text>{{ data.userInfo?.userName ?? '匿名用户' }}</a-typography-text>
               </div>
-            </a-space>
-          </p>
-          <p>创建时间：{{ dayjs(data.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
+            </a-descriptions-item>
+            <a-descriptions-item label="创建时间">
+              {{ dayjs(data.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+            </a-descriptions-item>
+          </a-descriptions>
+
           <a-space size="medium">
             <a-button v-if="data.reviewStatus === 1" type="primary" :href="`/answer/do/${appId}`">开始答题</a-button>
             <a-button v-if="data.reviewStatus === 1" @click="doClickShare">分享应用</a-button>
@@ -94,7 +128,12 @@ watchEffect(() => {
 
 <style scoped lang="scss">
 #appDetailPage {
-  // > 代表只对content-wrapper下一层的标签生效，仅一层
+  .content-wrapper {
+    max-width: calc(100% - 320px); // 右边图片宽度
+    word-break: break-word;
+    min-width: 0; // 必须加这个，防止内容撑爆
+  }
+
   .content-wrapper > * {
     margin-bottom: 24px;
   }
@@ -110,4 +149,5 @@ watchEffect(() => {
     unicode-bidi: isolate;
   }
 }
+
 </style>

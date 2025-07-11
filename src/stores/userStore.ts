@@ -8,18 +8,21 @@ export const useUserStore = defineStore('loginUser', () => {
   const loginUser = ref<QueryUserDetailRespDTO>({
 
   })
+  const userAIPoint = ref(0)
 
   async function fetchLoginUser() {
     const result = await queryDetails()
     loginUser.value = result.data as QueryUserDetailRespDTO ?? {userRole: ACCESS_ENUM.NOT_LOGIN}
-    console.log('userStores: ',loginUser.value)
+    userAIPoint.value = result.data?.aiPoint ?? 0
+    // console.log('userStores: ',loginUser.value)
   }
 
   function setLoginUser(newLoginUser: QueryUserDetailRespDTO) {
     loginUser.value = newLoginUser
+    userAIPoint.value = newLoginUser.aiPoint ?? 0
   }
 
-  return { loginUser, setLoginUser, fetchLoginUser }
+  return { loginUser,userAIPoint, setLoginUser, fetchLoginUser }
 },{
   //开启持久化
   persist: true

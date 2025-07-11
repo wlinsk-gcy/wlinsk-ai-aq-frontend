@@ -3,8 +3,9 @@ import type { QueryPageRespDTO } from '@/api/models/user/app/QueryPageDTO'
 import { useRouter } from 'vue-router'
 import { IconShareInternal } from '@arco-design/web-vue/es/icon'
 import { Message } from '@arco-design/web-vue'
-import { h } from 'vue';
-import { IconExclamationCircleFill } from '@arco-design/web-vue/es/icon';
+import { h } from 'vue'
+import { IconExclamationCircleFill } from '@arco-design/web-vue/es/icon'
+
 // const renderIcon = () => h(IconExclamationCircleFill);
 interface Props {
   app: QueryPageRespDTO
@@ -28,25 +29,25 @@ const doCardClick = () => {
 }
 //解决：Cannot read properties of undefined (reading 'writeText')
 const unsecuredCopyToClipboard = (text: string) => {
-  const textArea = document.createElement("textarea");
-  textArea.value = text;
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  document.body.appendChild(textArea)
+  textArea.focus()
+  textArea.select()
   try {
-    document.execCommand('copy');
+    document.execCommand('copy')
   } catch (err) {
-    console.error('Unable to copy to clipboard', err);
+    console.error('Unable to copy to clipboard', err)
   }
-  document.body.removeChild(textArea);
+  document.body.removeChild(textArea)
 }
 const doClickShare = () => {
   const content = import.meta.env.VITE_SHARE_APP_PATH + props.app.appId
   //把链接复制到粘贴板
   if (window.isSecureContext && navigator.clipboard) {
-    navigator.clipboard.writeText(content);
+    navigator.clipboard.writeText(content)
   } else {
-    unsecuredCopyToClipboard(content);
+    unsecuredCopyToClipboard(content)
   }
   // navigator.clipboard.writeText(import.meta.env.VITE_SHARE_APP_PATH + props.app.appId)
   Message.success('分享链接已成功复制！')
@@ -58,7 +59,7 @@ const doClickShare = () => {
     <template #actions>
       <!--      <span class="icon-hover"> <IconThumbUp /> </span>-->
       <!--@click.stop是在点击子组件是，禁止触发父组件的事件-->
-      <span class="icon-hover"> <IconShareInternal @click.stop="doClickShare"/> </span>
+      <span class="icon-hover"> <IconShareInternal @click.stop="doClickShare" /> </span>
     </template>
     <template #cover>
       <div
@@ -74,7 +75,25 @@ const doClickShare = () => {
         />
       </div>
     </template>
-    <a-card-meta :title="app.appName" :description="app.appDesc">
+    <a-card-meta :title="app.appName">
+      <template #description>
+        <a-popover
+          v-if="app.appDesc && app.appDesc.length > 15"
+          :popup-props="{ overlayStyle: { maxWidth: '200px' } }"
+        >
+          <template #content>
+            <div style="max-width: 168px; word-break: break-word">
+              {{ app.appDesc }}
+            </div>
+          </template>
+          <span class="desc-ellipsis">
+            {{ app.appDesc.substring(0, 15) + '...' }}
+          </span>
+        </a-popover>
+        <span v-else class="desc-ellipsis">
+          {{ app.appDesc }}
+        </span>
+      </template>
       <template #avatar>
         <div :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }">
           <a-avatar

@@ -7,6 +7,7 @@ import { ref } from 'vue'
 import { aiGenerate } from '@/api/controller/user/questionController'
 import { Message } from '@arco-design/web-vue'
 import { useQuestionStore } from '@/stores/questionStore'
+import { useUserStore } from '@/stores/userStore'
 
 interface Props {
   appId: string
@@ -27,6 +28,7 @@ const form = ref<AiGenerateQuestionReqDTO>({
   optionNumber: 3,
   questionNumber: 5
 })
+const userStore = useUserStore()
 //抽屉是否展示
 const visible = ref(false)
 //是否正在提交表单
@@ -42,6 +44,11 @@ const handleCancel = () => {
 }
 const handleSubmit = async () => {
   if (props.appId === '') {
+    return
+  }
+  await userStore.fetchLoginUser()
+  if (userStore.userAIPoint <= 0) {
+    Message.error('今日的AI积分已用完，请明天再来~')
     return
   }
   // 关闭抽屉
@@ -75,11 +82,17 @@ const handleSubmit = async () => {
     if (props.onSSEClose){
       props.onSSEClose(flag)
     }
+    await userStore.fetchLoginUser()
   }
   // submitting.value = false
 }
 const handleSSESubmit = () => {
   if (props.appId === '') {
+    return
+  }
+  userStore.fetchLoginUser()
+  if (userStore.userAIPoint <= 0) {
+    Message.error('今日的AI积分已用完，请明天再来~')
     return
   }
   props.onSSEStart?.(null)
@@ -106,6 +119,7 @@ const handleSSESubmit = () => {
     }
     eventSource.close()
   }
+  userStore.fetchLoginUser()
 }
 </script>
 

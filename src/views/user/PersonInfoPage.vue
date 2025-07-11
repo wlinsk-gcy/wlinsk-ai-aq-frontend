@@ -325,5 +325,11 @@ loadUserInfo()
       flex-grow: 1;
     }
   }
+
+  .card-demo {
+    width: 360px;
+    margin-left: 24px;
+    transition-property: all;
+  }
 }
 </style>

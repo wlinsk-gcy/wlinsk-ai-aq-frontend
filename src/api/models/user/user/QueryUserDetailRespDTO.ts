@@ -7,4 +7,5 @@ export type QueryUserDetailRespDTO = {
   userRole?: string,
   createTime?: Date,
   updateTime?: Date,
+  aiPoint?: number,
 }

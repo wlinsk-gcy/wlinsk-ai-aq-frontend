@@ -78,20 +78,28 @@ const handleCancel = () => {
         </a-menu-item>
       </a-menu>
     </a-col>
-    <a-col flex="100px">
+    <a-col flex="200px">
       <div v-if="userStore.loginUser.userId">
-        <a-dropdown trigger="hover" :style="{ background: 'none' }">
-          <a-avatar>
-            <img
-              alt="avatar"
-              :src=userStore.loginUser.userAvatar
-            />
-          </a-avatar>
-          <template #content>
-            <a-doption id="personInfo" @click="router.push('/person/info')">个人信息</a-doption>
-            <a-doption id="immediatelyLogout" @click="visible = true">退出登录</a-doption>
-          </template>
-        </a-dropdown>
+        <a-space>
+          <a-popover position="bottom">
+            <a-button status="success" shape="round" >剩余AI积分: {{userStore.userAIPoint}}</a-button>
+            <template #content>
+              <p>积分会在每日0点时更新，每天会重置5分</p>
+            </template>
+          </a-popover>
+          <a-dropdown trigger="hover" :style="{ background: 'none' }">
+            <a-avatar>
+              <img
+                alt="avatar"
+                :src=userStore.loginUser.userAvatar
+              />
+            </a-avatar>
+            <template #content>
+              <a-doption id="personInfo" @click="router.push('/person/info')">个人信息</a-doption>
+              <a-doption id="immediatelyLogout" @click="visible = true">退出登录</a-doption>
+            </template>
+          </a-dropdown>
+        </a-space>
       </div>
       <div v-else>
         <a-dropdown trigger="hover" :style="{ background: 'none' }">
