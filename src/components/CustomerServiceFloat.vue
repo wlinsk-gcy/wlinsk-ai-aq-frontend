@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { Message } from '@arco-design/web-vue'
 import {
   IconArrowUp,
@@ -9,24 +9,24 @@ import {
   IconRecordStop
 } from '@arco-design/web-vue/es/icon'
 import { useUserStore } from '@/stores/userStore'
-import { createSession, hotExamples } from '@/api/controller/tj/session/SessionController'
-import type { Example, QuerySessionRecordsRespDTO } from '@/api/models/tj/SessionDTO'
-import { useTjSessionStore } from '@/stores/tjSessionStore'
+import { createSession, hotExamples } from '@/api/controller/user/SessionController'
+import type { Example, QuerySessionRecordsRespDTO } from '@/api/models/user/chatSession/SessionDTO'
+import { useChatSessionStore } from '@/stores/chatSessionStore'
 import { marked } from 'marked'
 import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
-import { useTjChatRecordsStore } from '@/stores/tjChatRecordsStore'
-import { MessageTypeEnum } from '@/api/models/enums/tj/MessageTypeEnum'
+import { useChatRecordsStore } from '@/stores/chatRecordsStore'
+import { MessageTypeEnum } from '@/api/models/enums/MessageTypeEnum'
 import type { QueryAppDetailsRespDTO } from '@/api/models/user/app/QueryAppDetailsDTO'
 import ChatRecordAppCard from '@/components/ChatRecordAppCard.vue'
 import { useRouter } from 'vue-router'
-import { stop } from '@/api/controller/tj/chat/ChatController'
+import { stop } from '@/api/controller/user/ChatController'
 
 const router = useRouter()
 const userStore = useUserStore()
-const tjSessionStore = useTjSessionStore()
-const tjChatRecordsStore = useTjChatRecordsStore()
+const chatSessionStore = useChatSessionStore()
+const chatRecordsStore = useChatRecordsStore()
 
 interface ChatMessage {
   id: string
@@ -71,10 +71,10 @@ const changeSession = async (sessionId?: string) => {
   if (sessionId === currentSessionId.value) {
     return
   }
-  let records = tjChatRecordsStore.get(sessionId)
+  let records = chatRecordsStore.get(sessionId)
   if (!records || records.length === 0) {
-    await tjChatRecordsStore.fetchRecords(sessionId)
-    records = tjChatRecordsStore.get(sessionId)
+    await chatRecordsStore.fetchRecords(sessionId)
+    records = chatRecordsStore.get(sessionId)
   }
   messages.value = records.map((record) => {
     return {
@@ -116,7 +116,7 @@ const sendMessage = async () => {
       time: new Date().toLocaleTimeString()
     }
     messages.value.push(msg)
-    tjChatRecordsStore.append(currentSessionId.value, {
+    chatRecordsStore.append(currentSessionId.value, {
       content: msg.content,
       id: msg.id,
       type: msg.from
@@ -129,11 +129,11 @@ const sendMessage = async () => {
       time: new Date().toLocaleTimeString()
     }
     messages.value.push(think)
-    const response = await fetch(import.meta.env.VITE_TJ_PROJECT_HOST + `/chat/do`, {
+    const response = await fetch(import.meta.env.VITE_REQUEST_HOST + `/chat/do`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        userId: `${userStore.loginUser.userId}`
+        'token': `${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         question: question,
@@ -180,7 +180,7 @@ const sendMessage = async () => {
             }
           } else if (json.eventType === 1002) {
             let valueElement = messages.value[messages.value.length - 1]
-            tjChatRecordsStore.append(currentSessionId.value, {
+            chatRecordsStore.append(currentSessionId.value, {
               content: valueElement.content,
               id: valueElement.id,
               type: valueElement.from,
@@ -211,7 +211,7 @@ const sendMessage = async () => {
               }
             }
             let valueElement = messages.value[messages.value.length - 1]
-            tjChatRecordsStore.append(currentSessionId.value, {
+            chatRecordsStore.append(currentSessionId.value, {
               content: valueElement.content,
               id: valueElement.id,
               type: valueElement.from,
@@ -228,17 +228,17 @@ const sendMessage = async () => {
     }
     //获取当前最新历史会话的id给后端，判断是否需要更新会话列表
     if (
-      tjSessionStore.sessionRecords &&
-      (tjSessionStore.sessionRecords.lastSessionId != tjSessionStore.currentSessionId ||
-        (tjSessionStore.sessionRecords?.today && !tjSessionStore.sessionRecords.today[0].title))
+      chatSessionStore.sessionRecords &&
+      (chatSessionStore.sessionRecords.lastSessionId != chatSessionStore.currentSessionId ||
+        (chatSessionStore.sessionRecords?.today && !chatSessionStore.sessionRecords.today[0].title))
     ) {
-      // console.log('tjSessionStore.fetchSessionRecords()')
-      await tjSessionStore.fetchSessionRecords()
+      // console.log('chatSessionStore.fetchSessionRecords()')
+      await chatSessionStore.fetchSessionRecords()
       if (!currentSessionId.value) {
         // console.log('querySessionRecords设置currentSessionId')
-        currentSessionId.value = tjSessionStore.currentSessionId
+        currentSessionId.value = chatSessionStore.currentSessionId
       }
-      sessionHistory.value = tjSessionStore.sessionRecords
+      sessionHistory.value = chatSessionStore.sessionRecords
     }
     //更新ai点数
     await userStore.fetchLoginUser()
@@ -269,7 +269,7 @@ const handleClose = () => {
 const createNewSession = async () => {
   messages.value = []
   const session = await createSession()
-  tjSessionStore.currentSessionId = session.data?.sessionId
+  chatSessionStore.currentSessionId = session.data?.sessionId
   currentSessionId.value = session.data?.sessionId
   if (session.data?.examples) {
     hotQuestions.value = session.data?.examples
@@ -278,15 +278,15 @@ const createNewSession = async () => {
 
 const querySessionRecords = async () => {
   // 加载历史
-  if (!tjSessionStore.sessionRecords) {
-    // console.log('CustomerServiceFloat.vue调用tjSessionStore.fetchSessionRecords()')
-    await tjSessionStore.fetchSessionRecords()
+  if (!chatSessionStore.sessionRecords) {
+    // console.log('CustomerServiceFloat.vue调用chatSessionStore.fetchSessionRecords()')
+    await chatSessionStore.fetchSessionRecords()
     if (!currentSessionId.value) {
       // console.log('querySessionRecords设置currentSessionId')
-      currentSessionId.value = tjSessionStore.currentSessionId
+      currentSessionId.value = chatSessionStore.currentSessionId
     }
   }
-  sessionHistory.value = tjSessionStore.sessionRecords
+  sessionHistory.value = chatSessionStore.sessionRecords
 }
 
 function fillInput(q: Example) {
@@ -301,17 +301,17 @@ const changeHotQuestions = async () => {
 
 const queryCurrentSessionRecords = async () => {
   // console.log('queryCurrentSessionRecords')
-  if (!currentSessionId.value && !tjSessionStore.currentSessionId) {
+  if (!currentSessionId.value && !chatSessionStore.currentSessionId) {
     // console.log('currentSessionId为空')
     return
   }
   if (!currentSessionId.value) {
-    currentSessionId.value = tjSessionStore.currentSessionId
+    currentSessionId.value = chatSessionStore.currentSessionId
   }
   if (!currentSessionId.value) {
     return
   }
-  const messageVOs = tjChatRecordsStore.get(currentSessionId.value)
+  const messageVOs = chatRecordsStore.get(currentSessionId.value)
   const existingIds = new Set(messages.value.map((msg) => msg.id))
   if (messageVOs && messageVOs.length > 0) {
     messages.value = messageVOs
@@ -328,8 +328,9 @@ const queryCurrentSessionRecords = async () => {
 }
 const initLoadHistory = ref(false)
 watchEffect(async () => {
-  if (userStore.loginUser.userId && !initLoadHistory.value) {
-    // console.log('历史记录初始化')
+  // console.log('触发watchEffect')
+  if(userStore.userId && !initLoadHistory.value) {
+    // console.log('历史记录初始化，userid：{}，initLoadHistory：{}', userStore.userId, initLoadHistory.value)
     await changeHotQuestions()
     await querySessionRecords()
     await queryCurrentSessionRecords()
@@ -389,7 +390,9 @@ watchEffect(async () => {
             >历史记录
           </a-button>
           <template #content>
-            <a-dgroup title="当天" v-if="sessionHistory?.today && sessionHistory?.today.length > 0">
+            <a-dgroup title="当天" v-if="sessionHistory?.today
+            && sessionHistory?.today.length > 0
+            && sessionHistory.today[0].title">
               <a-doption
                 v-for="item in sessionHistory.today"
                 :key="item.sessionId"
@@ -464,7 +467,7 @@ watchEffect(async () => {
           background: #fff;
         "
       />
-      <div class="cs-title">Hello，我是AI助理</div>
+      <div class="cs-title">Hello，我是Ansure AI助理</div>
       <div class="cs-desc">我不仅能推荐题库、答疑解惑，还能为您激发创意、畅聊心事。</div>
       <div class="cs-demo-title">试试这样问我：</div>
       <div class="cs-hot-questions">

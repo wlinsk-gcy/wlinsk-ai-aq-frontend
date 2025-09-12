@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { MessageVO } from '@/api/models/tj/SessionDTO'
-import { queryBySessionId } from '@/api/controller/tj/session/SessionController'
+import type { MessageVO } from '@/api/models/user/chatSession/SessionDTO'
+import { queryBySessionId } from '@/api/controller/user/SessionController'
 
-export const useTjChatRecordsStore = defineStore(
-  'tjChatRecords',
+export const useChatRecordsStore = defineStore(
+  'chatRecords',
   () => {
     const messageRecords = ref<Record<string, MessageVO[]>>({})
 
@@ -47,6 +47,10 @@ export const useTjChatRecordsStore = defineStore(
       delete messageRecords.value[sessionId]
     }
 
+    function clear() {
+      messageRecords.value = {}
+    }
+
     return {
       messageRecords,
       fetchRecords,
@@ -54,7 +58,8 @@ export const useTjChatRecordsStore = defineStore(
       append,
       appendAll,
       get,
-      remove
+      remove,
+      clear
     }
   },
   {

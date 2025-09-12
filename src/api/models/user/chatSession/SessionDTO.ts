@@ -1,4 +1,4 @@
-import type { MessageTypeEnum } from '@/api/models/enums/tj/MessageTypeEnum'
+import type { MessageTypeEnum } from '@/api/models/enums/MessageTypeEnum'
 import type { QueryAppDetailsRespDTO } from '@/api/models/user/app/QueryAppDetailsDTO'
 
 

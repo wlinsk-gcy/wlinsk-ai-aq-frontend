@@ -4,7 +4,7 @@ import ACCESS_ENUM from '@/access/accessEnum'
 import checkAccess from '@/access/checkAccess'
 import { Modal } from '@arco-design/web-vue'
 import { isEmptyObject } from '@arco-design/web-vue/es/_utils/is'
-import { useTjSessionStore } from '@/stores/tjSessionStore'
+import { useChatSessionStore } from '@/stores/chatSessionStore'
 
 router.beforeEach(async (to, from, next) => {
   if (to.path === '/user/login' || to.path === '/user/threePartLogin' || to.path === '/user/register'){

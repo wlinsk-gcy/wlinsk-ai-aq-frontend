@@ -8,7 +8,6 @@ import type { Result } from '@/api/models/Result'
 import { Message, Modal } from '@arco-design/web-vue'
 import { useUserStore } from '@/stores/userStore'
 const request = axios.create({
-  // baseURL: 'http://localhost:8081/api',
   baseURL: import.meta.env.VITE_REQUEST_HOST,
   timeout: 60000,
   // headers: {'X-Custom-Header': 'foobar'},

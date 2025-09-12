@@ -9,7 +9,7 @@ import { ScoringStrategyEnum, ScoringStrategyEnumMap } from '@/api/models/enums/
 import { addApp, queryById, updateApp } from '@/api/controller/user/appController'
 import { useUserStore } from '@/stores/userStore'
 import { Message, Modal, Spin } from '@arco-design/web-vue'
-import { MessageTypeEnum } from '@/api/models/enums/tj/MessageTypeEnum'
+import { MessageTypeEnum } from '@/api/models/enums/MessageTypeEnum'
 
 interface Props {
   appId?: string
@@ -127,11 +127,11 @@ const aiGenerate = async (type: generateType) => {
   try {
     // 模拟请求
     // await new Promise((resolve) => setTimeout(resolve, 3000))
-    const response = await fetch(import.meta.env.VITE_TJ_PROJECT_HOST + `/chat/polish`, {
+    const response = await fetch(import.meta.env.VITE_REQUEST_HOST + `/chat/polish`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        userId: `${userStore.loginUser.userId}`
+        'token': `${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         question: question,

@@ -5,24 +5,25 @@ import { queryDetails } from '@/api/controller/user/userController'
 import ACCESS_ENUM from '@/access/accessEnum'
 
 export const useUserStore = defineStore('loginUser', () => {
-  const loginUser = ref<QueryUserDetailRespDTO>({
-
-  })
+  const userId = ref<string>()
+  const loginUser = ref<QueryUserDetailRespDTO>({})
   const userAIPoint = ref(0)
 
   async function fetchLoginUser() {
     const result = await queryDetails()
     loginUser.value = result.data as QueryUserDetailRespDTO ?? {userRole: ACCESS_ENUM.NOT_LOGIN}
     userAIPoint.value = result.data?.aiPoint ?? 0
+    userId.value = result.data?.userId
     // console.log('userStores: ',loginUser.value)
   }
 
   function setLoginUser(newLoginUser: QueryUserDetailRespDTO) {
     loginUser.value = newLoginUser
     userAIPoint.value = newLoginUser.aiPoint ?? 0
+    userId.value = newLoginUser.userId ?? undefined
   }
 
-  return { loginUser,userAIPoint, setLoginUser, fetchLoginUser }
+  return { userId,loginUser,userAIPoint, setLoginUser, fetchLoginUser }
 },{
   //开启持久化
   persist: true

@@ -9,6 +9,8 @@ import { useUserStore } from '@/stores/userStore'
 import type { UpdatePasswordReqDTO } from '@/api/models/user/user/UpdatePasswordReqDTO'
 import type { UpdateUserNameReqDTO } from '@/api/models/user/user/UpdateUserNameReqDTO'
 import type { UpdateUserProfileReqDTO } from '@/api/models/user/user/UpdateUserProfileReqDTO'
+import { useChatSessionStore } from '@/stores/chatSessionStore'
+import { useChatRecordsStore } from '@/stores/chatRecordsStore'
 
 export async function queryDetails() {
   return request<any, Result<QueryUserDetailRespDTO>>('/user/queryDetails', {
@@ -73,6 +75,8 @@ export async function logout(){
     // 退出登录后，清除本地存储的token
     localStorage.removeItem('token')
     useUserStore().setLoginUser({})
+    localStorage.removeItem('chatRecords')
+    useChatSessionStore().clearStore()
     return res
   })
 }
