@@ -11,7 +11,6 @@ import { useUserStore } from '@/stores/userStore'
 
 interface Props {
   appId: string
-  onSuccess?: (result: QuestionContentDTO[]) => void
   onSSESuccess?: (result: QuestionContentDTO) => void
   onSSEStart?: (event: any) => void
   onSSEClose?: (event: any) => void
@@ -42,7 +41,8 @@ const handleOk = () => {
 const handleCancel = () => {
   visible.value = false
 }
-const handleSubmit = async () => {
+const controller = new AbortController()
+const handleStreamSubmit = async () => {
   if (props.appId === '') {
     return
   }
@@ -51,75 +51,65 @@ const handleSubmit = async () => {
     Message.error('今日的AI积分已用完，请明天再来~')
     return
   }
-  // 关闭抽屉
-  handleCancel()
-  if (props.onSSEStart){
-    props.onSSEStart(null)
-  }
-  // submitting.value = true
-  let flag = false;
-  try {
-    const result = await aiGenerate({
-      ...form.value,
-      aiGenerateQuestionId: questionStore.aiGenerateQuestionId
-    })
-    if (result.data?.questionContent && result.data.questionContent.length > 0) {
-      //不为空才算成功
-      if (props.onSuccess) {
-        props.onSuccess(result.data.questionContent ?? [])
-        flag = true
-      }
-      if (result.data?.aiGenerateQuestionId) {
-        questionStore.setAiGenerateQuestionId(result.data.aiGenerateQuestionId)
-      }
-      // Message.success('生成题目成功')
-    }
-    // Message.success(`生成题目成功，共生成${form.value.questionNumber}道题`)
-
-  } catch (e: any) {
-    Message.error('操作失败：' + e)
-  }finally {
-    if (props.onSSEClose){
-      props.onSSEClose(flag)
-    }
-    await userStore.fetchLoginUser()
-  }
-  // submitting.value = false
-}
-const handleSSESubmit = () => {
-  if (props.appId === '') {
-    return
-  }
-  userStore.fetchLoginUser()
-  if (userStore.userAIPoint <= 0) {
-    Message.error('今日的AI积分已用完，请明天再来~')
-    return
-  }
   props.onSSEStart?.(null)
   //关闭抽屉
   handleCancel()
-  //原生的EventSource，无法设置请求头,只能在请求参数中携带了
-  const eventSource = new EventSource(
-    import.meta.env.VITE_REQUEST_HOST+'/question/aiGenerate/sse' +
-      `?appId=${props.appId}&questionNumber=${form.value.questionNumber}` +
-      `&optionNumber=${form.value.optionNumber}&aiGenerateQuestionId=${questionStore.aiGenerateQuestionId}` +
-      `&token=${localStorage.getItem('token')}`
-  )
-  eventSource.onmessage = function (event) {
-    const result = JSON.parse(event.data)
-    // console.log(result)
-    questionStore.setAiGenerateQuestionId(result.aiGenerateQuestionId)
-    props.onSSESuccess?.(result)
-  }
-  eventSource.onerror = function (event) {
-    if (event.eventPhase === EventSource.CLOSED) {
-      //正常关闭
-      // console.log('连接关闭')
-      props.onSSEClose?.(event)
+  try {
+    const response = await fetch(import.meta.env.VITE_REQUEST_HOST + `/chat/question`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        token: `${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({
+        appId: props.appId,
+        questionNumber: form.value.questionNumber,
+        optionNumber: form.value.optionNumber,
+        aiGenerateQuestionId: questionStore.aiGenerateQuestionId
+      }),
+      signal: controller.signal // 将 AbortController 的 signal 传递给 fetch
+    })
+    if (!response.body) {
+      console.error('No response body')
+      return
     }
-    eventSource.close()
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder('utf-8')
+    let buffer = ''
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+      buffer += decoder.decode(value, { stream: true })
+      // 以 \n\n 作为一条完整 SSE 消息的分隔符
+      const parts = buffer.split('\n\n')
+      buffer = parts.pop() ?? '' // 留下最后半截，等下次再拼
+      for (const part of parts) {
+        const line = part.trim()
+        if (!line.startsWith('data:')) continue
+        const jsonString = line.replace(/^data:\s*/, '')
+        try {
+          const json = JSON.parse(jsonString)
+          if (json.eventType === 1001 && json.eventData && json.eventData !== 'null') {
+            questionStore.setAiGenerateQuestionId(json.eventData.aiGenerateQuestionId)
+            props.onSSESuccess?.(json.eventData)
+          } else if (json.eventType === 1002) {
+            // console.log('事件流结束')
+            props.onSSEClose?.(json.eventType)
+          } else if (json.eventType === 1004 && json.eventData) {
+            Message.error(json.eventData)
+            return
+          }
+        } catch (e) {
+          console.error('JSON解析失败：', line)
+        }
+      }
+    }
+  } catch (err) {
+    Message.error('题目生成失败，请稍后重试')
+  } finally {
+    await userStore.fetchLoginUser()
   }
-  userStore.fetchLoginUser()
 }
 </script>
 
@@ -135,7 +125,7 @@ const handleSSESubmit = () => {
   >
     <template #title>AI 生成题目</template>
     <div>
-      <a-form :model="form" label-align="left" auto-label-width @submit="handleSubmit">
+      <a-form :model="form" label-align="left" auto-label-width @submit="handleStreamSubmit">
         <a-form-item label="应用 id">
           {{ appId }}
         </a-form-item>
@@ -158,11 +148,6 @@ const handleSSESubmit = () => {
         <a-form-item>
           <a-space>
             <a-button :loading="submitting" type="primary" html-type="submit" style="width: 100px">
-              <!--{{ submitting ? '生成中' : '一键生成' }}-->
-              一键生成
-            </a-button>
-            <a-button @click="handleSSESubmit" style="width: 100px">
-              <!--{{ submitting ? '生成中' : '实时生成' }}-->
               实时生成
             </a-button>
           </a-space>

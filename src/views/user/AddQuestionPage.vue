@@ -132,12 +132,6 @@ const loadData = async () => {
 /**
  * AI 生成题目成功后执行
  */
-const onAiGenerateSuccess = (result: QuestionContentDTO[]) => {
-  // Message.success(`AI 生成题目成功，生成 ${result.length} 道题目`)
-  //原有的基础上累加
-  questionContent.value = [...questionContent.value, ...result]
-}
-
 const onAiGenerateSuccessSSE = (result: QuestionContentDTO) => {
   //原有的基础上累加
   questionContent.value = [...questionContent.value, result]
@@ -151,7 +145,7 @@ const onSSEStart = (event: any) => {
   }).close
 }
 const onSSEClose = (event: any) => {
-  if (event){
+  if (event && event === 1002) {
     Message.success('生成完毕')
   }
   close?.()
@@ -185,7 +179,6 @@ watchEffect(() => {
             :on-s-s-e-success="onAiGenerateSuccessSSE"
             :on-s-s-e-start="onSSEStart"
             :onSSEClose="onSSEClose"
-            :onSuccess="onAiGenerateSuccess"
           />
         </a-space>
         <!--遍历每道题目-->

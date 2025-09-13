@@ -168,7 +168,7 @@ const aiGenerate = async (type: generateType) => {
               form.value.appDesc += json.eventData
             }
           } else if (json.eventType === 1002) {
-            console.log('消息结束')
+            // console.log('消息结束')
           }else if (json.eventType === 1004 && json.eventData) {
             Message.error('AI生成失败，请稍后重试')
             return
