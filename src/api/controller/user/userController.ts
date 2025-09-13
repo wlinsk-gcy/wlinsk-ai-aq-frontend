@@ -11,6 +11,7 @@ import type { UpdateUserNameReqDTO } from '@/api/models/user/user/UpdateUserName
 import type { UpdateUserProfileReqDTO } from '@/api/models/user/user/UpdateUserProfileReqDTO'
 import { useChatSessionStore } from '@/stores/chatSessionStore'
 import { useChatRecordsStore } from '@/stores/chatRecordsStore'
+import type { UserVerifyReqDTO } from '@/api/models/user/user/UserVerifyReqDTO'
 
 export async function queryDetails() {
   return request<any, Result<QueryUserDetailRespDTO>>('/user/queryDetails', {
@@ -61,6 +62,15 @@ export async function threePartLoginCallback(code: string){
 
 export async function register(reqDTO: UserRegisterReqDTO) {
   return request<any, Result<any>>('/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: reqDTO
+  })
+}
+export async function verify(reqDTO: UserVerifyReqDTO) {
+  return request<any, Result<any>>('/user/verify', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

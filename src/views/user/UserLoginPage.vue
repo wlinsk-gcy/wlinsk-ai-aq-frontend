@@ -59,7 +59,8 @@ const giteeLoginCallback = async () => {
 watchEffect(() => {
   giteeLoginCallback()
 })
-const userAccountRegex = /^\w{3,20}$/
+// 用户名(3~20位字母数字下划线) 或 邮箱
+const userAccountRegex = /^(?:\w{3,20}|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})$/
 const userPasswordRegex = /^[a-zA-Z]\w{7,15}$/
 const rules = {
   userAccount: [
