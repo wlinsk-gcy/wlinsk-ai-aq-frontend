@@ -14,12 +14,30 @@ import AnswerResultPage from '@/views/user/answer/AnswerResultPage.vue'
 import MyAnswerPage from '@/views/user/answer/MyAnswerPage.vue'
 import MyAppPage from '@/views/user/MyAppPage.vue'
 import PersonInfoPage from '@/views/user/PersonInfoPage.vue'
+import MindgraspLanding from '@/views/mindgrasp/MindgraspLanding.vue'
+import MindgraspLogin from '@/views/mindgrasp/MindgraspLogin.vue'
 
 export const routes = [
   {
     path: '/',
     name: '首页',
     component: HomePage
+  },
+  {
+    path: '/mindgrasp',
+    name: 'Mindgrasp Landing',
+    component: MindgraspLanding,
+    meta: {
+      hideInMenu: true
+    }
+  },
+  {
+    path: '/mindgrasp/login',
+    name: 'Mindgrasp Login',
+    component: MindgraspLogin,
+    meta: {
+      hideInMenu: true
+    }
   },
   {
     path: '/app/details/:appId',
