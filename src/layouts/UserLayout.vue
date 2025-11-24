@@ -14,14 +14,14 @@ const handleClickInfo = () => {
       <a-layout-header class="header">
         <a-space>
           <img class="logo" src="@/assets/logo.png" alt="logo" />
-          <div>AI Answering Application Platform</div>
+          <div>Ansure Platform</div>
         </a-space>
       </a-layout-header>
       <a-layout-content class="content">
         <router-view />
       </a-layout-content>
       <a-layout-footer class="footer">
-        <a-button type="text" @click="handleClickInfo">WLINSK</a-button>
+        <!--<a-button type="text" @click="handleClickInfo">WLINSK</a-button>-->
       </a-layout-footer>
     </a-layout>
   </div>
@@ -30,8 +30,8 @@ const handleClickInfo = () => {
 <style scoped lang="scss">
 #userLayout {
   text-align: center;
-  background: url('https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png') 0% 0% /
-    100% 100%;
+  //background: url('https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png') 0% 0% /
+  //  100% 100%;
 
   .logo {
     width: 100px;

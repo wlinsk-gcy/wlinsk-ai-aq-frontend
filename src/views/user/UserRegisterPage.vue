@@ -136,69 +136,514 @@ const rules = {
 </script>
 
 <template>
-  <p class="h2">用户注册</p>
-  <a-form
-    :rules="rules"
-    :model="form"
-    :style="{ width: '480px', margin: '0 auto' }"
-    label-align="left"
-    auto-label-width
-    @submit="handleSubmit"
-  >
-    <a-form-item
-      field="userAccount"
-      tooltip="仅支持邮箱格式"
-      label="用户名"
-      validate-trigger="blur"
-    >
-      <a-input v-model="form.userAccount" placeholder="请输入用户名，仅支持邮箱格式" />
-    </a-form-item>
+  <div class="mg-register-container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="gradient-text">加入 Ansure AI</span>
+            开始智能学习之旅
+          </h1>
+          <p class="hero-subtitle">
+            创建您的专属账户，解锁 AI 驱动的学习体验。<br />
+            个性化学习路径，即时解答，让学习更高效。
+          </p>
 
-    <a-form-item field="verifyCode" label="验证码" validate-trigger="blur">
-      <div style="display: flex; gap: 8px; width: 100%">
-        <a-input v-model="form.verifyCode" placeholder="请输入验证码" />
-        <a-button
-          type="primary"
-          :loading="loading"
-          :disabled="cooldown > 0"
-          @click="handleSendCode"
+          <div class="hero-stats" style="padding: 10px 60px">
+            <div class="stat-item">
+              <span class="stat-number">5W+</span>
+              <span class="stat-label">活跃用户</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">1000W+</span>
+              <span class="stat-label">问题解答</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">99.8%</span>
+              <span class="stat-label">准确率</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="ai-interface-mockup">
+            <div class="mockup-header">
+              <div class="mockup-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="mockup-title">Ansure AI Assistant</div>
+            </div>
+            <div class="mockup-content">
+              <div class="chat-messages">
+                <div class="message ai-message">
+                  <div class="avatar ai-avatar">🤖</div>
+                  <div class="message-content">今天想要学习什么新知识呢？</div>
+                </div>
+                <div class="message user-message">
+                  <div class="avatar user-avatar">👤</div>
+                  <div class="message-content">请用简单的语言解释量子计算。</div>
+                </div>
+                <div class="message ai-message">
+                  <div class="avatar ai-avatar">🤖</div>
+                  <div class="message-content">
+                    <div class="typing-indicator">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main registration card -->
+    <div class="mg-register-card">
+      <!-- Logo and Title Section -->
+      <div class="mg-register-header">
+        <div class="mg-register-logo">
+          <img src="@/assets/logo.png" alt="Ansure AI - Logo" class="mg-logo-img" />
+        </div>
+        <h1 class="mg-register-title">创建账户</h1>
+        <p class="mg-register-subtitle">加入 Ansure，开启智能学习新体验</p>
+      </div>
+
+      <!-- Registration Form -->
+      <a-form
+        :rules="rules"
+        :model="form"
+        class="mg-register-form"
+        label-align="left"
+        auto-label-width
+        @submit="handleSubmit"
+      >
+        <a-form-item
+          field="userAccount"
+          tooltip="仅支持邮箱格式"
+          label="邮箱地址"
+          validate-trigger="blur"
         >
-          {{ cooldown > 0 ? cooldown + ' 秒后重试' : '发送验证码' }}
-        </a-button>
-      </div>
-    </a-form-item>
+          <a-input
+            v-model="form.userAccount"
+            placeholder="请输入您的邮箱地址"
+            size="small"
+            class="mg-input-large"
+            aria-label="邮箱地址"
+          />
+        </a-form-item>
 
-    <a-form-item
-      field="userPassword"
-      tooltip="以字母开头，长度在8-16之间，只能包含字母、数字和下划线"
-      label="密码"
-      validate-trigger="blur"
-    >
-      <a-input-password v-model="form.userPassword" placeholder="请输入密码" />
-    </a-form-item>
-    <a-form-item field="checkPassword" label="确认密码" validate-trigger="blur">
-      <a-input-password v-model="form.checkPassword" placeholder="请输入确认密码" />
-    </a-form-item>
-    <a-form-item>
-      <div style="display: flex; width: 100%; justify-content: space-between">
-        <a-button html-type="submit" style="width: 100px">注册</a-button>
-        <!--<a-link href="/user/login">老用户登录</a-link>-->
-        <a-link href="#" @click="router.push('/user/login')">老用户登录</a-link>
-      </div>
-    </a-form-item>
-  </a-form>
+        <a-form-item field="verifyCode" label="验证码" validate-trigger="blur">
+          <div class="mg-verify-code-group">
+            <a-input
+              v-model="form.verifyCode"
+              placeholder="请输入验证码"
+              size="large"
+              class="mg-input-large mg-verify-input"
+              aria-label="验证码"
+            />
+            <a-button
+              type="primary"
+              size="large"
+              class="mg-verify-btn"
+              :loading="loading"
+              :disabled="cooldown > 0 || !form.userAccount"
+              @click="handleSendCode"
+            >
+              <template v-if="loading">
+                <a-spin size="small" />
+                <span style="margin-left: 8px">发送中...</span>
+              </template>
+              <template v-else>
+                {{ cooldown > 0 ? `${cooldown} 秒后重试` : '发送验证码' }}
+              </template>
+            </a-button>
+          </div>
+        </a-form-item>
+
+        <a-form-item
+          field="userPassword"
+          tooltip="以字母开头，长度在8-16之间，只能包含字母、数字和下划线"
+          label="密码"
+          validate-trigger="blur"
+        >
+          <a-input-password
+            v-model="form.userPassword"
+            placeholder="请设置密码"
+            size="large"
+            class="mg-input-large"
+            aria-label="密码"
+          />
+        </a-form-item>
+
+        <a-form-item field="checkPassword" label="确认密码" validate-trigger="blur">
+          <a-input-password
+            v-model="form.checkPassword"
+            placeholder="请再次输入密码"
+            size="large"
+            class="mg-input-large"
+            aria-label="确认密码"
+          />
+        </a-form-item>
+
+        <a-form-item no-style class="mg-form-actions">
+          <div class="mg-register-btn-wrapper">
+            <a-button
+              html-type="submit"
+              size="large"
+              type="primary"
+              class="mg-btn-primary"
+            >
+              立即注册
+            </a-button>
+          </div>
+        </a-form-item>
+
+        <div class="mg-form-footer">
+          <span class="mg-login-text">已有账户？</span>
+          <a-link href="#" @click="router.push('/user/login')" class="mg-login-link">
+            立即登录
+          </a-link>
+        </div>
+      </a-form>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.h2 {
-  display: block;
-  font-size: 1.5em;
-  margin-block-start: 0.83em;
-  margin-block-end: 0.83em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  font-weight: bold;
-  unicode-bidi: isolate;
-  margin-bottom: 16px;
+//@import '@/styles/mindgrasp-design-tokens.scss';
+
+/* ====== Layout ====== */
+.mg-register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px; /* 左右间距 */
+  box-sizing: border-box;
+}
+
+/* ====== Registration Card ====== */
+.mg-register-card {
+  position: relative;
+  z-index: var(--mg-z-card, 10);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--mg-radius-2xl);
+  box-shadow: var(--mg-shadow-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  padding: var(--mg-space-12);
+  width: 100%;
+  max-width: 480px;
+  animation: slideUp 0.6s ease-out forwards;
+
+  @media (max-width: 768px) {
+    padding: var(--mg-space-8);
+    max-width: 400px;
+  }
+
+  @media (max-width: 480px) {
+    padding: var(--mg-space-6);
+    max-width: 320px;
+  }
+}
+
+@keyframes slideUp { //从下向上进入
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====== Header ====== */
+.mg-register-header {
+  text-align: center;
+  margin-bottom: var(--mg-space-10);
+
+  .mg-register-logo {
+    margin-bottom: var(--mg-space-6);
+
+    .mg-logo-img {
+      height: 60px;
+      border-radius: var(--mg-radius-lg);
+      box-shadow: var(--mg-shadow-md);
+      transition: transform var(--mg-transition-base);
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      @media (max-width: 768px) {
+        height: 48px;
+      }
+    }
+  }
+
+  .mg-register-title {
+    margin-bottom: var(--mg-space-3);
+    font-size: var(--mg-text-4xl);
+    font-weight: var(--mg-font-bold);
+    color: var(--mg-gray-900);
+
+    @media (max-width: 768px) {
+      font-size: var(--mg-text-3xl);
+    }
+  }
+
+  .mg-register-subtitle {
+    color: var(--mg-gray-600);
+    font-size: var(--mg-text-base);
+    line-height: 1.6;
+  }
+}
+
+/* ====== Registration Form ====== */
+.mg-register-form {
+  .arco-form-item {
+    margin-bottom: var(--mg-space-6);
+
+    .arco-form-item-label {
+      font-weight: var(--mg-font-medium);
+      color: var(--mg-gray-700);
+      margin-bottom: var(--mg-space-2);
+    }
+
+    .arco-form-item-message {
+      font-size: var(--mg-text-sm);
+      margin-top: var(--mg-space-1);
+    }
+
+    &.arco-form-item-error {
+      .arco-form-item-message {
+        color: var(--mg-error-500);
+      }
+    }
+  }
+
+
+  .mg-input-large {
+    height: 56px;
+    border-radius: var(--mg-radius-lg);
+    transition: all var(--mg-transition-base);
+
+  }
+  :deep(.mg-input-large.arco-input-wrapper) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
+    > .arco-input {
+      padding-left: 12px !important;
+    }
+
+    > .arco-input-suffix {
+      padding-right: 12px !important;
+      border-left: 2px solid rgb(230, 230, 230);
+    }
+  }
+
+
+
+  .mg-form-actions {
+    margin: var(--mg-space-8) 0 var(--mg-space-6);
+  }
+
+  .mg-register-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--mg-space-6);
+  }
+
+  .mg-form-footer {
+    text-align: center;
+    font-size: var(--mg-text-base);
+    color: var(--mg-gray-600);
+
+    .mg-login-text {
+      margin-right: var(--mg-space-2);
+      color: var(--mg-gray-600);
+    }
+
+    .mg-login-link {
+      color: var(--mg-primary-600);
+      font-weight: var(--mg-font-medium);
+      text-decoration: none;
+      transition: color var(--mg-transition-fast);
+
+      &:hover {
+        color: var(--mg-primary-700);
+      }
+    }
+  }
+}
+
+/* ====== Verification Code Group ====== */
+.mg-verify-code-group {
+  display: flex;
+  gap: var(--mg-space-3);
+  width: 100%;
+
+  .mg-verify-input {
+    flex: 1;
+  }
+
+  .mg-verify-btn {
+    min-width: 120px;
+    font-weight: var(--mg-font-medium);
+    border-radius: var(--mg-radius-lg);
+    transition: all var(--mg-transition-base);
+
+    &:hover:not(.arco-btn-loading):not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: var(--mg-shadow-md);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      min-width: 100px;
+      font-size: var(--mg-text-sm);
+    }
+  }
+}
+
+/* ====== Primary Button ====== */
+.mg-btn-primary {
+  background: linear-gradient(135deg, var(--mg-primary-500), var(--mg-primary-600));
+  color: white;
+  border: none;
+  font-weight: var(--mg-font-semibold);
+  border-radius: var(--mg-radius-lg);
+  min-width: 280px;
+  height: 56px;
+  transition: all var(--mg-transition-base);
+  box-shadow: var(--mg-shadow-md);
+
+  &:hover:not(.arco-btn-loading) {
+    transform: translateY(-2px);
+    box-shadow: var(--mg-shadow-lg);
+    background: linear-gradient(135deg, var(--mg-primary-600), var(--mg-primary-700));
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    min-width: 240px;
+    height: 48px;
+  }
+}
+
+/* ====== Responsive Design ====== */
+@media (max-width: 1024px) {
+  .mg-register-container {
+    flex-direction: column;
+    gap: var(--mg-space-8);
+    padding: var(--mg-space-4);
+  }
+
+  .hero {
+    padding: var(--mg-space-6) 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .mg-register-header {
+    margin-bottom: var(--mg-space-8);
+  }
+
+  .mg-register-form .arco-form-item {
+    margin-bottom: var(--mg-space-5);
+  }
+
+  .hero-stats .stat-item {
+    .stat-number {
+      font-size: var(--mg-text-xl);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .mg-register-header {
+    margin-bottom: var(--mg-space-6);
+  }
+
+  .mg-verify-code-group {
+    flex-direction: column;
+    gap: var(--mg-space-2);
+
+    .mg-verify-btn {
+      width: 100%;
+    }
+  }
+
+  .hero-stats {
+    gap: var(--mg-space-4);
+  }
+}
+
+/* ====== Accessibility ====== */
+//@media (prefers-reduced-motion: reduce) {
+//  .mg-register-card,
+//  .hero-content,
+//  .hero-visual,
+//  .ai-interface-mockup {
+//    animation: none;
+//  }
+//
+//  .mg-register-bg-pattern {
+//    animation: none;
+//  }
+//
+//  .typing-indicator span {
+//    animation: none;
+//  }
+//
+//  * {
+//    transition-duration: 0.01ms !important;
+//    animation-duration: 0.01ms !important;
+//  }
+//}
+
+/* ====== Performance Optimizations ====== */
+.mg-register-card {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+//.ai-interface-mockup {
+//  will-change: transform;
+//  transform: translateZ(0);
+//
+//  @media (max-width: 768px) {
+//    animation: none; /* Remove animation on mobile for performance */
+//  }
+//}
+
+/* ====== Focus States ====== */
+//.mg-register-card:focus-within {
+//  box-shadow: 0 0 0 2px var(--mg-primary-200), var(--mg-shadow-2xl);
+//}
+
+.mg-btn-primary:focus {
+  outline: 2px solid var(--mg-primary-500);
+  outline-offset: 2px;
+}
+
+.mg-verify-btn:focus {
+  outline: 2px solid var(--mg-primary-500);
+  outline-offset: 2px;
 }
 </style>

@@ -1,0 +1,166 @@
+/**
+ * Mindgrasp Design System - Main Entry Point
+ * Import all Mindgrasp styles and overrides
+ */
+
+@import './mindgrasp-design-tokens.scss';
+@import './mindgrasp-overrides.scss';
+//@import './mindgrasp-landing.scss';
+
+/* === Global Base Styles === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--mg-font-sans);
+  line-height: var(--mg-leading-normal);
+  color: var(--mg-gray-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: var(--mg-gray-50);
+  color: var(--mg-gray-900);
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* === Typography Classes === */
+.mg-heading-1 {
+  font-size: var(--mg-text-4xl);
+  font-weight: var(--mg-font-bold);
+  line-height: var(--mg-leading-tight);
+  margin-bottom: var(--mg-space-6);
+}
+
+.mg-heading-2 {
+  font-size: var(--mg-text-3xl);
+  font-weight: var(--mg-font-bold);
+  line-height: var(--mg-leading-tight);
+  margin-bottom: var(--mg-space-5);
+}
+
+.mg-heading-3 {
+  font-size: var(--mg-text-2xl);
+  font-weight: var(--mg-font-semibold);
+  line-height: var(--mg-leading-snug);
+  margin-bottom: var(--mg-space-4);
+}
+
+.mg-text-body {
+  font-size: var(--mg-text-base);
+  line-height: var(--mg-leading-relaxed);
+  color: var(--mg-gray-600);
+}
+
+.mg-text-caption {
+  font-size: var(--mg-text-sm);
+  line-height: var(--mg-leading-normal);
+  color: var(--mg-gray-500);
+}
+
+/* === Layout Classes === */
+.mg-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--mg-space-4);
+}
+
+.mg-section {
+  padding: var(--mg-space-16) 0;
+}
+
+.mg-card {
+  background: white;
+  border-radius: var(--mg-radius-xl);
+  box-shadow: var(--mg-shadow-sm);
+  padding: var(--mg-space-8);
+  transition: all var(--mg-transition-base);
+
+  &:hover {
+    box-shadow: var(--mg-shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+/* === Utility Classes === */
+.mg-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mg-text-center {
+  text-align: center;
+}
+
+.mg-w-full {
+  width: 100%;
+}
+
+.mg-mb-4 {
+  margin-bottom: var(--mg-space-4);
+}
+
+.mg-mb-6 {
+  margin-bottom: var(--mg-space-6);
+}
+
+.mg-mb-8 {
+  margin-bottom: var(--mg-space-8);
+}
+
+.typing-indicator {
+  display: flex;
+  gap: var(--spacing-xs);
+
+  span {
+    width: 8px;
+    height: 8px;
+    background: var(--color-gray-400);
+    border-radius: var(--radius-full);
+    animation: typing 1.4s ease-in-out infinite;
+
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+  }
+}
+@keyframes typing {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing-indicator span {
+    animation-duration: 1.4s !important;
+    animation-iteration-count: infinite !important;
+    animation-name: typing !important;
+  }
+}
+
+/* === Responsive Classes === */
+@media (max-width: 768px) {
+  .mg-container {
+    padding: 0 var(--mg-space-3);
+  }
+
+  .mg-section {
+    padding: var(--mg-space-12) 0;
+  }
+
+  .mg-card {
+    padding: var(--mg-space-6);
+  }
+}

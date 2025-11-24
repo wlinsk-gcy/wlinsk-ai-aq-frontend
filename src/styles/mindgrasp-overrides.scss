@@ -1,0 +1,289 @@
+/**
+ * Mindgrasp Design System - Arco Design Overrides
+ * Extends Arco Design Vue components with Mindgrasp styling
+ */
+
+@import './mindgrasp-design-tokens.scss';
+
+/* === Arco Button Overrides === */
+.arco-btn {
+  font-family: var(--mg-font-sans);
+  font-weight: var(--mg-font-medium);
+  border-radius: var(--mg-radius-lg);
+  transition: all var(--mg-transition-base);
+  box-shadow: var(--mg-shadow-sm);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--mg-shadow-md);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--mg-shadow-sm);
+  }
+
+  &.arco-btn-primary {
+    background: linear-gradient(135deg, var(--mg-primary-500), var(--mg-primary-600));
+    border: none;
+    color: white;
+
+    &:hover {
+      background: linear-gradient(135deg, var(--mg-primary-600), var(--mg-primary-700));
+      transform: translateY(-2px);
+      box-shadow: var(--mg-shadow-lg);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  &.arco-btn-secondary {
+    background: white;
+    border-color: var(--mg-gray-300);
+    color: var(--mg-gray-700);
+
+    &:hover {
+      border-color: var(--mg-primary-500);
+      color: var(--mg-primary-600);
+      background: var(--mg-primary-50);
+    }
+  }
+
+  &.arco-btn-size-large {
+    padding: var(--mg-space-3) var(--mg-space-6);
+    font-size: var(--mg-text-base);
+    height: auto;
+  }
+
+  &.arco-btn-loading {
+    opacity: 0.8;
+  }
+}
+
+/* === Arco Input Overrides === */
+.arco-input,
+.arco-input-password {
+  border-radius: var(--mg-radius-lg);
+  border: 2px solid var(--mg-gray-200);
+  padding: var(--mg-space-3) var(--mg-space-4);
+  font-size: var(--mg-text-base);
+  transition: all var(--mg-transition-base);
+  box-shadow: var(--mg-shadow-sm);
+
+  &:hover {
+    border-color: var(--mg-gray-300);
+  }
+
+  &:focus,
+  &.arco-input-focus {
+    border-color: var(--mg-primary-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-width: 2px;
+  }
+
+  &.arco-input-error {
+    border-color: var(--mg-error-500);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--mg-gray-400);
+  }
+}
+
+.arco-input-wrapper {
+  border-radius: var(--mg-radius-lg);
+  overflow: hidden;
+}
+
+/* === Arco Form Overrides === */
+.arco-form {
+  .arco-form-item {
+    margin-bottom: var(--mg-space-6);
+
+    .arco-form-item-label {
+      font-weight: var(--mg-font-medium);
+      color: var(--mg-gray-700);
+      margin-bottom: var(--mg-space-2);
+    }
+
+    .arco-form-item-message {
+      font-size: var(--mg-text-sm);
+      margin-top: var(--mg-space-1);
+    }
+
+    &.arco-form-item-error {
+      .arco-form-item-message {
+        color: var(--mg-error-500);
+      }
+    }
+  }
+}
+
+/* === Arco Card Overrides === */
+.arco-card {
+  border-radius: var(--mg-radius-xl);
+  border: 1px solid var(--mg-gray-200);
+  box-shadow: var(--mg-shadow-sm);
+  transition: all var(--mg-transition-base);
+
+  &:hover {
+    box-shadow: var(--mg-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &.arco-card-hoverable {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .arco-card-header {
+    border-bottom: 1px solid var(--mg-gray-100);
+    padding: var(--mg-space-6);
+  }
+
+  .arco-card-body {
+    padding: var(--mg-space-6);
+  }
+}
+
+/* === Arco Link Overrides === */
+.arco-link {
+  color: var(--mg-primary-600);
+  font-weight: var(--mg-font-medium);
+  transition: all var(--mg-transition-fast);
+
+  &:hover {
+    color: var(--mg-primary-700);
+  }
+
+  &:focus {
+    outline: 2px solid var(--mg-primary-500);
+    outline-offset: 2px;
+  }
+}
+
+/* === Arco Avatar Overrides === */
+.arco-avatar {
+  border-radius: var(--mg-radius-lg);
+  box-shadow: var(--mg-shadow-sm);
+  transition: all var(--mg-transition-base);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: var(--mg-shadow-md);
+  }
+}
+
+/* === Arco Space Overrides === */
+.arco-space {
+  &.arco-space-vertical {
+    .arco-space-item {
+      margin-bottom: var(--mg-space-3);
+    }
+  }
+
+  &.arco-space-horizontal {
+    .arco-space-item {
+      margin-right: var(--mg-space-3);
+    }
+  }
+}
+
+/* === Arco Tooltip Overrides === */
+.arco-tooltip {
+  .arco-tooltip-popup {
+    background: var(--mg-gray-800);
+    color: white;
+    border-radius: var(--mg-radius-md);
+    padding: var(--mg-space-2) var(--mg-space-3);
+    font-size: var(--mg-text-sm);
+    box-shadow: var(--mg-shadow-lg);
+  }
+}
+
+/* === Arco Message/Notification Overrides === */
+.arco-message {
+  border-radius: var(--mg-radius-lg);
+  box-shadow: var(--mg-shadow-lg);
+
+  &.arco-message-success {
+    background: var(--mg-success-50);
+    border: 1px solid var(--mg-success-200);
+    color: var(--mg-success-800);
+  }
+
+  &.arco-message-error {
+    background: var(--mg-error-50);
+    border: 1px solid var(--mg-error-200);
+    color: var(--mg-error-800);
+  }
+
+  &.arco-message-info {
+    background: var(--mg-primary-50);
+    border: 1px solid var(--mg-primary-200);
+    color: var(--mg-primary-800);
+  }
+}
+
+/* === Arco Modal Overrides === */
+.arco-modal {
+  .arco-modal-header {
+    border-bottom: 1px solid var(--mg-gray-200);
+    padding: var(--mg-space-6);
+  }
+
+  .arco-modal-body {
+    padding: var(--mg-space-6);
+  }
+
+  .arco-modal-footer {
+    border-top: 1px solid var(--mg-gray-200);
+    padding: var(--mg-space-6);
+  }
+}
+
+/* === Responsive Overrides === */
+@media (max-width: 768px) {
+  .arco-form {
+    .arco-form-item {
+      margin-bottom: var(--mg-space-4);
+    }
+  }
+
+  .arco-btn {
+    &.arco-btn-size-large {
+      padding: var(--mg-space-2) var(--mg-space-4);
+      font-size: var(--mg-text-sm);
+    }
+  }
+}
+
+/* === Dark Mode Overrides === */
+[data-theme="dark"] {
+  .arco-input,
+  .arco-input-password {
+    background: var(--mg-gray-800);
+    border-color: var(--mg-gray-600);
+    color: var(--mg-gray-200);
+
+    &:focus {
+      border-color: var(--mg-primary-400);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  .arco-card {
+    background: var(--mg-gray-800);
+    border-color: var(--mg-gray-600);
+  }
+
+  .arco-btn.arco-btn-secondary {
+    background: var(--mg-gray-700);
+    border-color: var(--mg-gray-600);
+    color: var(--mg-gray-200);
+  }
+}

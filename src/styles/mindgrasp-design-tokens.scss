@@ -1,0 +1,205 @@
+/**
+ * Mindgrasp Design System - Design Tokens
+ * Based on Mindgrasp.ai UI analysis documentation
+ */
+
+:root {
+  /* === Primary Colors === */
+  --mg-primary-50: #eff6ff;
+  --mg-primary-100: #dbeafe;
+  --mg-primary-200: #bfdbfe;
+  --mg-primary-300: #93c5fd;
+  --mg-primary-400: #60a5fa;
+  --mg-primary-500: #3b82f6;  /* Main brand color */
+  --mg-primary-600: #2563eb;  /* Hover states */
+  --mg-primary-700: #1d4ed8;  /* Darker variants */
+  --mg-primary-800: #1e40af;
+  --mg-primary-900: #1e3a8a;
+
+  /* === Secondary Colors === */
+  --mg-secondary-50: #ecfeff;
+  --mg-secondary-100: #cffafe;
+  --mg-secondary-200: #a5f3fc;
+  --mg-secondary-300: #67e8f9;
+  --mg-secondary-400: #22d3ee;
+  --mg-secondary-500: #0ea5e9;  /* Secondary actions */
+  --mg-secondary-600: #0284c7;
+  --mg-secondary-700: #0369a1;
+  --mg-secondary-800: #075985;
+  --mg-secondary-900: #0c4a6e;
+
+  /* === Accent Colors === */
+  --mg-success-50: #ecfdf5;
+  --mg-success-100: #d1fae5;
+  --mg-success-200: #a7f3d0;
+  --mg-success-300: #6ee7b7;
+  --mg-success-400: #34d399;
+  --mg-success-500: #10b981;   /* Success states */
+  --mg-success-600: #059669;
+  --mg-success-700: #047857;
+  --mg-success-800: #065f46;
+  --mg-success-900: #064e3b;
+
+  --mg-warning-50: #fffbeb;
+  --mg-warning-100: #fef3c7;
+  --mg-warning-200: #fde68a;
+  --mg-warning-300: #fcd34d;
+  --mg-warning-400: #fbbf24;
+  --mg-warning-500: #f59e0b;   /* Warnings/CTAs */
+  --mg-warning-600: #d97706;
+  --mg-warning-700: #b45309;
+  --mg-warning-800: #92400e;
+  --mg-warning-900: #78350f;
+
+  --mg-error-50: #fef2f2;
+  --mg-error-100: #fee2e2;
+  --mg-error-200: #fecaca;
+  --mg-error-300: #fca5a5;
+  --mg-error-400: #f87171;
+  --mg-error-500: #ef4444;   /* Error messages, validation */
+  --mg-error-600: #dc2626;
+  --mg-error-700: #b91c1c;
+  --mg-error-800: #991b1b;
+  --mg-error-900: #7f1d1d;
+
+  /* === Neutral Colors === */
+  --mg-gray-50: #f9fafb;     /* Light backgrounds */
+  --mg-gray-100: #f3f4f6;
+  --mg-gray-200: #e5e7eb;
+  --mg-gray-300: #d1d5db;     /* Input borders, dividers */
+  --mg-gray-400: #9ca3af;
+  --mg-gray-500: #6b7280;     /* Text, borders */
+  --mg-gray-600: #4b5563;
+  --mg-gray-700: #374151;
+  --mg-gray-800: #1f2937;
+  --mg-gray-900: #111827;     /* Dark text */
+
+  /* === Spacing System (8-point grid) === */
+  --mg-space-1: 0.25rem;      /* 4px */
+  --mg-space-2: 0.5rem;       /* 8px */
+  --mg-space-3: 0.75rem;      /* 12px */
+  --mg-space-4: 1rem;         /* 16px */
+  --mg-space-5: 1.25rem;      /* 20px */
+  --mg-space-6: 1.5rem;       /* 24px */
+  --mg-space-8: 2rem;         /* 32px */
+  --mg-space-10: 2.5rem;      /* 40px */
+  --mg-space-12: 3rem;        /* 48px */
+  --mg-space-16: 4rem;        /* 64px */
+  --mg-space-20: 5rem;        /* 80px */
+  --mg-space-24: 6rem;        /* 96px */
+
+  /* === Border Radius === */
+  --mg-radius-sm: 0.375rem;   /* 6px */
+  --mg-radius-md: 0.5rem;      /* 8px */
+  --mg-radius-lg: 0.75rem;     /* 12px */
+  --mg-radius-xl: 1rem;        /* 16px */
+  --mg-radius-2xl: 1.5rem;     /* 24px */
+  --mg-radius-full: 9999px;
+
+  /* === Shadows === */
+  --mg-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --mg-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --mg-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --mg-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --mg-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* === Typography === */
+  --mg-font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --mg-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+
+  /* === Fluid Typography === */
+  --mg-text-xs: clamp(0.75rem, 2vw, 0.875rem);
+  --mg-text-sm: clamp(0.875rem, 2vw, 1rem);
+  --mg-text-base: clamp(1rem, 2vw, 1.125rem);
+  --mg-text-lg: clamp(1.125rem, 2vw, 1.25rem);
+  --mg-text-xl: clamp(1.25rem, 3vw, 1.5rem);
+  --mg-text-2xl: clamp(1.5rem, 3vw, 2rem);
+  --mg-text-3xl: clamp(1.875rem, 4vw, 2.25rem);
+  --mg-text-4xl: clamp(2.25rem, 4vw, 3rem);
+  --mg-text-5xl: clamp(3rem, 5vw, 4rem);
+
+  /* === Line Heights === */
+  --mg-leading-tight: 1.25;
+  --mg-leading-snug: 1.375;
+  --mg-leading-normal: 1.5;
+  --mg-leading-relaxed: 1.625;
+  --mg-leading-loose: 2;
+
+  /* === Font Weights === */
+  --mg-font-light: 300;
+  --mg-font-normal: 400;
+  --mg-font-medium: 500;
+  --mg-font-semibold: 600;
+  --mg-font-bold: 700;
+  --mg-font-extrabold: 800;
+
+  /* === Transitions === */
+  --mg-transition-fast: 150ms ease;
+  --mg-transition-base: 250ms ease;
+  --mg-transition-slow: 350ms ease;
+
+  /* === Z-Index === */
+  --mg-z-dropdown: 1000;
+  --mg-z-sticky: 1020;
+  --mg-z-fixed: 1030;
+  --mg-z-modal-backdrop: 1040;
+  --mg-z-modal: 1050;
+  --mg-z-popover: 1060;
+  --mg-z-tooltip: 1070;
+  --mg-z-toast: 1080;
+
+  /* === Social Media Brand Colors === */
+  --mg-google-blue: #4285F4;
+  --mg-microsoft-blue: #00A4EF;
+  --mg-github-black: #333;
+  --mg-twitter-blue: #1DA1F2;
+  --mg-linkedin-blue: #0077B5;
+  --mg-gitee-red: #C71D23;
+}
+
+/* === Dark Mode Variables === */
+[data-theme="dark"] {
+  --mg-gray-50: #1f2937;
+  --mg-gray-100: #374151;
+  --mg-gray-200: #4b5563;
+  --mg-gray-300: #6b7280;
+  --mg-gray-400: #9ca3af;
+  --mg-gray-500: #d1d5db;
+  --mg-gray-600: #e5e7eb;
+  --mg-gray-700: #f3f4f6;
+  --mg-gray-800: #f9fafb;
+  --mg-gray-900: #ffffff;
+}
+
+/* === Responsive Breakpoints === */
+/* Mobile: < 768px */
+/* Tablet: 768px - 1024px */
+/* Desktop: > 1024px */
+
+/* === Accessibility === */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mg-transition-fast: 0.01ms ease;
+    --mg-transition-base: 0.01ms ease;
+    --mg-transition-slow: 0.01ms ease;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === High Contrast Mode === */
+@media (prefers-contrast: high) {
+  :root {
+    --mg-primary-500: #0000ff;
+    --mg-error-500: #ff0000;
+    --mg-success-500: #008000;
+    --mg-gray-300: #666666;
+    --mg-gray-500: #333333;
+  }
+}

@@ -309,7 +309,7 @@
 
 <script setup lang="ts">
 import { ref, h, onMounted, onUnmounted } from 'vue'
-import './MindgraspLanding.scss'
+import '../../styles/mindgrasp-landing.scss'
 import MobileMenu from './MobileMenu.vue'
 
 const mobileMenuOpen = ref(false)

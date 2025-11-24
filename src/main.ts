@@ -1,5 +1,6 @@
 //引入清除默认样式文件
 import '@/styles/reset.scss'
+import '@/styles/mindgrasp-main.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
