@@ -316,11 +316,9 @@ const rules = {
 </template>
 
 <style scoped lang="scss">
-//@import '@/styles/mindgrasp-design-tokens.scss';
 
 /* ====== Layout ====== */
 .mg-register-container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -547,52 +545,43 @@ const rules = {
 }
 
 /* ====== Responsive Design ====== */
-@media (max-width: 1024px) {
-  .mg-register-container {
-    flex-direction: column;
-    gap: var(--mg-space-8);
-    padding: var(--mg-space-4);
-  }
+//@media (max-width: 1024px) {
+//  .mg-register-container {
+//    flex-direction: column;
+//    gap: var(--mg-space-8);
+//    padding: var(--mg-space-4);
+//  }
+//
+//}
 
-  .hero {
-    padding: var(--mg-space-6) 0;
-  }
-}
+//@media (max-width: 768px) {
+//  .mg-register-header {
+//    margin-bottom: var(--mg-space-8);
+//  }
+//
+//  .mg-register-form .arco-form-item {
+//    margin-bottom: var(--mg-space-5);
+//  }
+//}
 
-@media (max-width: 768px) {
-  .mg-register-header {
-    margin-bottom: var(--mg-space-8);
-  }
-
-  .mg-register-form .arco-form-item {
-    margin-bottom: var(--mg-space-5);
-  }
-
-  .hero-stats .stat-item {
-    .stat-number {
-      font-size: var(--mg-text-xl);
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .mg-register-header {
-    margin-bottom: var(--mg-space-6);
-  }
-
-  .mg-verify-code-group {
-    flex-direction: column;
-    gap: var(--mg-space-2);
-
-    .mg-verify-btn {
-      width: 100%;
-    }
-  }
-
-  .hero-stats {
-    gap: var(--mg-space-4);
-  }
-}
+//@media (max-width: 480px) {
+//  .mg-register-header {
+//    margin-bottom: var(--mg-space-6);
+//  }
+//
+//  .mg-verify-code-group {
+//    flex-direction: column;
+//    gap: var(--mg-space-2);
+//
+//    .mg-verify-btn {
+//      width: 100%;
+//    }
+//  }
+//
+//  .hero-stats {
+//    gap: var(--mg-space-4);
+//  }
+//}
 
 /* ====== Accessibility ====== */
 //@media (prefers-reduced-motion: reduce) {

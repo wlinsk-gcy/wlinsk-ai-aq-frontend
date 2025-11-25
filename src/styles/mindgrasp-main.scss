@@ -164,3 +164,79 @@ body {
     padding: var(--mg-space-6);
   }
 }
+
+// Footer Styles
+.mg-footer {
+  background: var(--color-gray-900);
+  position: relative;
+  z-index: 1;
+}
+
+.mg-footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+
+  @media (max-width: 768px) {
+    padding: 0 var(--spacing-md);
+  }
+}
+/* 全局覆盖 Arco Drawer 样式 */
+.arco-drawer-header {
+  background: #fafafa !important;
+  padding: 40px 20px !important;
+  margin-top: 72px;
+  border-bottom: 1px solid #eee !important;
+}
+
+.mg-footer-bottom {
+  border-top: 1px solid var(--color-gray-800);
+  padding-top: var(--spacing-2xl);
+  padding-bottom: var(--spacing-2xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.mg-copyright {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-gray-400);
+}
+
+.mg-legal-links {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.mg-legal-link {
+  color: var(--color-gray-400);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  font-size: 0.875rem;
+
+  &:hover {
+    color: var(--color-primary-400);
+  }
+}
+:root {
+  /* 极高的 popup 层级，确保比 header 高 */
+  --arco-trigger-popup-z-index: 999999 !important;
+}
+
+/* 保险起见，直接覆盖常见类名 */
+.arco-trigger,
+.arco-dropdown-popup,
+.arco-popover-popup,
+.arco-tooltip,
+.arco-trigger-popup {
+  z-index: 999999 !important;
+}

@@ -55,64 +55,69 @@ const handleOk = async () => {
 const handleCancel = () => {
   visible.value = false;
 }
+const isScrolled = ref(false)
 </script>
 
 <template>
-  <a-row id="globalHeader" align="center" :wrap="false">
-    <a-col flex="auto">
-      <a-menu mode="horizontal" :selected-keys="selectedKeys" @menu-item-click="doMenuClick">
-        <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
-          <div class="titleBar" style="cursor: pointer" @click="router.push('/')">
-            <img class="logo" src="../assets/logo.png" alt="logo" />
-            <div class="title">AI Answering</div>
+  <!--<a-row id="globalHeader" align="center" :wrap="false">-->
+  <header class="mg-header" :class="{ scrolled: isScrolled }">
+    <nav class="mg-navbar">
+      <div class="mg-nav-container">
+        <!-- 左：Logo -->
+        <div class="mg-nav-left">
+          <router-link to="/" class="mg-brand-link">
+            <img class="mg-logo" src="@/assets/logo.png" alt="Ansure AI" />
+            <div class="mg-brand-text">
+              <span class="mg-brand-name">Ansure</span>
+              <span class="mg-brand-ai">AI</span>
+            </div>
+          </router-link>
+        </div>
+        <!-- 中：菜单 -->
+        <div class="mg-nav-center">
+          <a-menu mode="horizontal" :selected-keys="selectedKeys" @menu-item-click="doMenuClick">
+            <a-menu-item v-if="route.path !== '/'" @click="goBack">
+              <icon-arrow-left :style="{ marginRight: '4px' }" />
+              返回
+            </a-menu-item>
+            <a-menu-item v-for="item in filterRoutes" :key="item.path">
+              {{ item.name }}
+            </a-menu-item>
+          </a-menu>
+        </div>
+        <!--右：用户操作区-->
+        <div class="mg-nav-right">
+          <div v-if="userStore.loginUser.userId">
+            <a-space>
+              <a-popover position="bottom">
+                <a-button status="success" shape="round">剩余AI积分: {{ userStore.userAIPoint }}</a-button>
+                <template #content>
+                  <p>积分会在每日0点重置 5 分</p>
+                </template>
+              </a-popover>
+              <a-dropdown trigger="hover">
+                <a-avatar>
+                  <img alt="avatar" :src="userStore.loginUser.userAvatar" />
+                </a-avatar>
+                <template #content>
+                  <a-doption @click="router.push('/person/info')">个人信息</a-doption>
+                  <a-doption @click="visible = true">退出登录</a-doption>
+                </template>
+              </a-dropdown>
+            </a-space>
           </div>
-        </a-menu-item>
-        <a-menu-item v-if="route.path !== '/'" @click="goBack">
-          <a-button :style="{ background: 'none' }">
-            <icon-arrow-left :style="{ marginRight: '4px' }" />
-            返回
-          </a-button>
-        </a-menu-item>
-        <a-menu-item v-for="item in filterRoutes" :key="item.path">
-          {{ item.name }}
-        </a-menu-item>
-      </a-menu>
-    </a-col>
-    <a-col flex="200px">
-      <div v-if="userStore.loginUser.userId">
-        <a-space>
-          <a-popover position="bottom">
-            <a-button status="success" shape="round" >剩余AI积分: {{userStore.userAIPoint}}</a-button>
-            <template #content>
-              <p>积分会在每日0点时更新，每天会重置5分</p>
-            </template>
-          </a-popover>
-          <a-dropdown trigger="hover" :style="{ background: 'none' }">
-            <a-avatar>
-              <img
-                alt="avatar"
-                :src=userStore.loginUser.userAvatar
-              />
-            </a-avatar>
-            <template #content>
-              <a-doption id="personInfo" @click="router.push('/person/info')">个人信息</a-doption>
-              <a-doption id="immediatelyLogout" @click="visible = true">退出登录</a-doption>
-            </template>
-          </a-dropdown>
-        </a-space>
+          <div v-else>
+            <a-dropdown trigger="hover">
+              <a-avatar> 未登录 </a-avatar>
+              <template #content>
+                <a-doption @click="router.push('/user/login')">立即登录</a-doption>
+              </template>
+            </a-dropdown>
+          </div>
+        </div>
       </div>
-      <div v-else>
-        <a-dropdown trigger="hover" :style="{ background: 'none' }">
-          <a-avatar>
-            未登录
-          </a-avatar>
-          <template #content>
-            <a-doption id="immediatelyLogin" @click="router.push('/user/login')">立即登录</a-doption>
-          </template>
-        </a-dropdown>
-      </div>
-    </a-col>
-  </a-row>
+    </nav>
+  </header>
   <a-modal :visible="visible" @ok="handleOk" @cancel="handleCancel" unmountOnClose>
     <template #title>
       退出登录
@@ -122,51 +127,123 @@ const handleCancel = () => {
 </template>
 
 <style scoped lang="scss">
-#globalHeader {
-  .titleBar {
+
+.mg-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-gray-200);
+  z-index: var(--z-sticky);
+  transition: all var(--transition-base);
+
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: var(--shadow-md);
+    border-bottom-color: var(--color-gray-300);
+  }
+}
+
+.mg-navbar {
+  padding: var(--spacing-md) 0;
+}
+
+.mg-nav-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // 三栏布局
+  padding: 0 var(--spacing-4xl);
+}
+.mg-nav-left {
+  flex: 200px;   // 固定宽度（Logo 区）
+  display: flex;
+  align-items: center;
+}
+.mg-nav-center {
+  flex: auto;    // 菜单自适应撑满空间
+  display: flex;
+  align-items: center;
+
+  :deep(.arco-menu) {
+    border-bottom: none;
+    width: 100%;
     display: flex;
-    align-items: center;
-
-    .logo {
-      width: 70px;
-      height: 42px;
-      margin-right: 10px;
-    }
-
-    .title {
-      color: black;
-    }
+    justify-content: center; // 菜单居中（可去掉）
   }
+}
 
-  .arco-btn-size-medium {
-    padding: 0 2px;
+.mg-nav-right {
+  flex: 200px;   // 右侧固定宽度
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.mg-nav-center {
+  flex: auto;    // 菜单自适应撑满空间
+  display: flex;
+  align-items: center;
+
+  :deep(.arco-menu) {
+    border-bottom: none;
+    width: 100%;
+    display: flex;
+    justify-content: center; // 菜单居中（可去掉）
   }
+}
 
-  @media screen and (max-width: 768px) {
-    :deep(.arco-menu) {
-      border-bottom: none;
-    }
+.mg-nav-right {
+  flex: 200px;   // 右侧固定宽度
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 
-    :deep(.arco-menu-pop) {
-      .arco-menu-item {
-        height: 40px !important;
-        line-height: 40px !important;
-        padding: 0 16px !important;
-      }
-    }
 
-    :deep(.arco-menu-collapse-button) {
-      height: 32px;
-      width: 32px;
-    }
+.mg-nav-brand {
+  display: flex;
+  align-items: center;
+}
 
-    .titleBar {
-      .logo {
-        width: 40px;
-        height: 24px;
-        margin-right: 0;
-      }
-    }
+.mg-brand-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    transform: translateY(-1px);
   }
+}
+
+.mg-logo {
+  width: 100px;
+  height: 60px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+.mg-brand-text {
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.mg-brand-name {
+  color: var(--color-gray-900);
+}
+
+.mg-brand-ai {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-left: 0.25rem;
 }
 </style>

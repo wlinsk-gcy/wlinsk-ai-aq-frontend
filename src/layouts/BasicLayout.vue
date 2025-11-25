@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
-import { Modal } from '@arco-design/web-vue'
 import CustomerServiceFloat from '@/components/CustomerServiceFloat.vue'
-
-const handleClickInfo = () => {
-  Modal.info({
-    content: '祝您生活愉快！'
-  });
-};
 </script>
 
 <template>
@@ -18,13 +11,25 @@ const handleClickInfo = () => {
       </a-layout-header>
       <a-layout-content class="content">
         <router-view />
+        <CustomerServiceFloat />
       </a-layout-content>
-      <a-layout-footer class="footer">
-        <a-button type="text" @click="handleClickInfo">WLINSK</a-button>
-      </a-layout-footer>
+      <footer class="mg-footer">
+        <div class="mg-footer-container">
+          <div class="mg-footer-bottom">
+            <p class="mg-copyright">
+              © 2025 Ansure AI. All rights reserved.
+            </p>
+            <div class="mg-legal-links">
+              <a href="#" class="mg-legal-link">Privacy Policy</a>
+              <a href="#" class="mg-legal-link">Terms of Service</a>
+              <a href="#" class="mg-legal-link">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </a-layout>
-    <CustomerServiceFloat />
   </div>
+
 </template>
 
 <style scoped lang="scss">
@@ -42,17 +47,11 @@ const handleClickInfo = () => {
     max-width: 1200px;
     width: 100%;
     box-sizing: border-box;
-    //居中 离底部28px
-    margin: 0 auto 28px;
+    //居中 离顶部96px，离底部28px
+    margin: 108px auto;
     //缩进20px
     padding: 20px;
     //background-color: aquamarine;
-  }
-
-  .footer {
-    padding: 16px;
-    text-align: center;
-    background: #efefef;
   }
 }
 </style>

@@ -248,11 +248,9 @@ const rules = {
 </template>
 
 <style scoped lang="scss">
-//@import '@/styles/mindgrasp-main.scss';
 
 /* ====== Layout ====== */
 .mg-login-container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;

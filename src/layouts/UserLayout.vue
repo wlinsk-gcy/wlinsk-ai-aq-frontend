@@ -56,24 +56,6 @@ onUnmounted(() => {
           </button>
         </div>
       </nav>
-
-      <div v-if="mobileMenuOpen" class="mg-mobile-menu-overlay" @click="closeMobileMenu">
-        <div class="mg-mobile-menu" @click.stop>
-          <div class="mg-mobile-menu-header">
-            <img class="mg-logo" src="@/assets/logo.png" alt="Ansure AI" />
-            <button class="mg-mobile-menu-close" @click="closeMobileMenu">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div class="mg-mobile-menu-content">
-            <router-link to="/" class="mg-mobile-menu-item" @click="closeMobileMenu">
-              返回首页
-            </router-link>
-          </div>
-        </div>
-      </div>
     </header>
 
     <a-layout-content class="mg-content">
@@ -100,7 +82,6 @@ onUnmounted(() => {
 <style scoped lang="scss">
 
 #userLayout {
-  min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 
@@ -352,61 +333,6 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-// Footer Styles
-.mg-footer {
-  background: var(--color-gray-900);
-  position: relative;
-  z-index: 1;
-}
-
-.mg-footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-
-  @media (max-width: 768px) {
-    padding: 0 var(--spacing-md);
-  }
-}
-
-.mg-footer-bottom {
-  border-top: 1px solid var(--color-gray-800);
-  padding-top: var(--spacing-2xl);
-  padding-bottom: var(--spacing-2xl);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-lg);
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-.mg-copyright {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--color-gray-400);
-}
-
-.mg-legal-links {
-  display: flex;
-  gap: var(--spacing-lg);
-  flex-wrap: wrap;
-}
-
-.mg-legal-link {
-  color: var(--color-gray-400);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-  font-size: 0.875rem;
-
-  &:hover {
-    color: var(--color-primary-400);
-  }
-}
 
 // Animations
 @keyframes slideInRight {

@@ -341,7 +341,7 @@ watchEffect(async () => {
 
 <template>
   <a-popover>
-    <div style="position: fixed; right: 64px; bottom: 128px; z-index: 9999" v-show="!visible">
+    <div style="position: fixed; right: 128px; bottom: 200px; z-index: 9999" v-show="!visible">
       <img
         src="/客服办公.svg"
         alt="智能客服"
@@ -362,18 +362,18 @@ watchEffect(async () => {
   </a-popover>
   <!-- 聊天窗口抽屉 -->
   <a-drawer
+    class="my-drawer"
     :visible="visible"
     :width="600"
     placement="right"
     :footer="false"
     unmountOnClose
     @cancel="handleClose"
-    :header-style="{ padding: '0 16px', borderBottom: '1px solid #f0f0f0' }"
     :body-style="{ padding: 0, background: '#f7f8fa' }"
   >
     <template #header>
       <!-- 顶部栏 -->
-      <a-button-group>
+      <a-button-group style="margin-top: 24px">
         <icon-down @click="handleClose" />
         <a-button type="text" :disabled="!canCreateSession" @click="createNewSession">
           创建会话
@@ -554,20 +554,12 @@ watchEffect(async () => {
 </template>
 
 <style scoped>
-.cs-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 0;
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
-  justify-content: space-between;
-}
-
 .cs-welcome {
   min-height: 500px;
   height: 70%;
   text-align: center;
-  padding: 32px 16px 16px 16px;
+  margin-top: 20px;
+  padding: 16px;
   background: #f7f8fa;
 }
 
