@@ -3,10 +3,8 @@ import type { QueryPageRespDTO } from '@/api/models/user/app/QueryPageDTO'
 import { useRouter } from 'vue-router'
 import { IconShareInternal } from '@arco-design/web-vue/es/icon'
 import { Message } from '@arco-design/web-vue'
-import { h } from 'vue'
-import { IconExclamationCircleFill } from '@arco-design/web-vue/es/icon'
+import { buildAppShareUrl, copyText } from '@/utils/share'
 
-// const renderIcon = () => h(IconExclamationCircleFill);
 interface Props {
   app: QueryPageRespDTO
 }
@@ -16,7 +14,9 @@ const props = withDefaults(defineProps<Props>(), {
     return {}
   }
 })
+
 const router = useRouter()
+
 const doCardClick = () => {
   if (
     props.app.appId === undefined ||
@@ -27,38 +27,26 @@ const doCardClick = () => {
   }
   router.push(`/app/details/${props.app.appId}`)
 }
-//解决：Cannot read properties of undefined (reading 'writeText')
-const unsecuredCopyToClipboard = (text: string) => {
-  const textArea = document.createElement('textarea')
-  textArea.value = text
-  document.body.appendChild(textArea)
-  textArea.focus()
-  textArea.select()
+
+const doClickShare = async () => {
+  if (!props.app.appId) {
+    Message.error('分享链接不可用')
+    return
+  }
+
   try {
-    document.execCommand('copy')
+    await copyText(buildAppShareUrl(props.app.appId))
+    Message.success('分享链接已复制')
   } catch (err) {
-    console.error('Unable to copy to clipboard', err)
+    console.error('Unable to copy share url', err)
+    Message.error('分享链接复制失败')
   }
-  document.body.removeChild(textArea)
-}
-const doClickShare = () => {
-  const content = import.meta.env.VITE_SHARE_APP_PATH + props.app.appId
-  //把链接复制到粘贴板
-  if (window.isSecureContext && navigator.clipboard) {
-    navigator.clipboard.writeText(content)
-  } else {
-    unsecuredCopyToClipboard(content)
-  }
-  // navigator.clipboard.writeText(import.meta.env.VITE_SHARE_APP_PATH + props.app.appId)
-  Message.success('分享链接已成功复制！')
 }
 </script>
 
 <template>
   <a-card class="appCard" hoverable @click="doCardClick">
     <template #actions>
-      <!--      <span class="icon-hover"> <IconThumbUp /> </span>-->
-      <!--@click.stop是在点击子组件是，禁止触发父组件的事件-->
       <span class="icon-hover"> <IconShareInternal @click.stop="doClickShare" /> </span>
     </template>
     <template #cover>
